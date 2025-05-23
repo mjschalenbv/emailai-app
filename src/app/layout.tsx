@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "EmailAI – Jouw AI e-mailassistent",
   description:
-    "Genereer professionele e-mails en antwoorden in seconden, met hulp van AI. Probeer het gratis op emailai.nl!",
+    "Genereer e-mails en antwoorden razendsnel met AI!",
   metadataBase: new URL("https://www.emailai.nl"),
   openGraph: {
     title: "EmailAI – Jouw AI e-mailassistent",
