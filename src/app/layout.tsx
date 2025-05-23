@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "EmailAI – Jouw AI e-mailassistent",
     description:
-      "Genereer professionele e-mails en antwoorden in seconden, met hulp van AI.",
+      "Snel e-mails of antwoorden genereren met AI!",
     url: "https://www.emailai.nl",
     siteName: "EmailAI",
     images: [
