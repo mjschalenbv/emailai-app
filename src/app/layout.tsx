@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EmailAI – Jouw AI e-mailassistent",
     description:
-      "Genereer professionele e-mails en antwoorden in seconden, met hulp van AI.",
+      "Snel e-mails of antwoorden genereren met AI!",
     images: ["/og-image.png"],
   },
 };
