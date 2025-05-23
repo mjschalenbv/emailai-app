@@ -55,9 +55,10 @@ Geef antwoord in dit JSON-formaat:
     throw new Error("❌ Geen antwoord van OpenAI.");
   }
 
+  // Dit is de ESLint/TypeScript veilige versie:
   try {
     return JSON.parse(antwoord);
-  } catch (err) {
+  } catch {
     console.error("❌ JSON-parsing mislukt:", antwoord);
     throw new Error("❌ Antwoord van OpenAI is geen geldig JSON.");
   }
