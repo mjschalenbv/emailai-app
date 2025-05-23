@@ -5,7 +5,7 @@ import React, { useState } from "react";
 // Types voor TypeScript
 type NummerType = "bestelnummer" | "factuurnummer" | "klantnummer" | "";
 
-type FormData = {
+type EmailFormData = {
   emailTekst: string;
   taal: string;
   naamAfzender: string;
@@ -14,7 +14,7 @@ type FormData = {
   nummer: string;
   nummerType: NummerType;
   context: string;
-  antwoordWens: string; // <-- voeg toe!
+  antwoordWens: string;
 };
 
 const nummerTypes: { value: NummerType; label: string }[] = [
@@ -24,27 +24,23 @@ const nummerTypes: { value: NummerType; label: string }[] = [
 ];
 
 export default function EmailForm() {
-  // TAB logica
   const [tab, setTab] = useState<"nieuw" | "antwoord">("nieuw");
-
-  // Form state
-const [formData, setFormData] = useState<FormData>({
-  emailTekst: "",
-  taal: "Nederlands",
-  naamAfzender: "",
-  naamOntvanger: "",
-  benadering: "Zakelijk",
-  nummer: "",
-  nummerType: "",
-  context: "",
-  antwoordWens: "", // <-- voeg toe!
-});
+  const [formData, setFormData] = useState<EmailFormData>({
+    emailTekst: "",
+    taal: "Nederlands",
+    naamAfzender: "",
+    naamOntvanger: "",
+    benadering: "Zakelijk",
+    nummer: "",
+    nummerType: "",
+    context: "",
+    antwoordWens: "",
+  });
 
   const [gegenereerdeEmail, setGegenereerdeEmail] = useState<string>("");
   const [gegenereerdOnderwerp, setGegenereerdOnderwerp] = useState<string>("");
   const [copyFeedback, setCopyFeedback] = useState<{ type: "subject" | "body" | null }>({ type: null });
 
-  // Handler voor invulvelden
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -55,37 +51,36 @@ const [formData, setFormData] = useState<FormData>({
   const handleNummerTypeChange = (value: NummerType) => {
     setFormData((prev) => ({
       ...prev,
-    nummerType: prev.nummerType === value ? "" : value, // ← als hij al geselecteerd is: deselect!
-  }));
-};
+      nummerType: prev.nummerType === value ? "" : value,
+    }));
+  };
 
-  // Kopieer-functie
   const handleCopy = async (text: string, type: "subject" | "body") => {
     await navigator.clipboard.writeText(text);
     setCopyFeedback({ type });
     setTimeout(() => setCopyFeedback({ type: null }), 1200);
   };
 
-  // Form submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  // API-calls
   const handleGenereer = async () => {
     setGegenereerdeEmail("");
     setGegenereerdOnderwerp("");
-    // Bouw data voor juiste scenario
-   const payload = { ...formData, isAntwoord: tab === "antwoord" };
-      tab === "nieuw"
-        ? { ...formData, isAntwoord: false }
-        : {
-            ...formData,
-            isAntwoord: true,
-            // Bij antwoord: ontvanger en afzender automatisch omwisselen!
-            naamAfzender: formData.naamOntvanger,
-            naamOntvanger: formData.naamAfzender,
-          };
+
+    const isAntwoord = tab === "antwoord";
+    const payload = isAntwoord
+      ? {
+          ...formData,
+          isAntwoord: true,
+          naamAfzender: formData.naamOntvanger,
+          naamOntvanger: formData.naamAfzender,
+        }
+      : {
+          ...formData,
+          isAntwoord: false,
+        };
 
     try {
       const response = await fetch("/api/genereer", {

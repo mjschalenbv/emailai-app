@@ -130,7 +130,7 @@ Voorbeeld:
       email: aiJson.email || "",
     });
   } catch (e) {
-    console.error("JSON-parsing mislukt in GENEREER:", antwoord);
+  console.error("JSON-parsing mislukt in GENEREER:", antwoord, e);
     return NextResponse.json({
       error: "AI gaf geen geldige JSON (genereer)",
       debug_antwoord: antwoord,
