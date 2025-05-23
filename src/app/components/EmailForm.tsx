@@ -65,39 +65,39 @@ export default function EmailForm() {
     e.preventDefault();
   };
 
-  const handleGenereer = async () => {
-    setGegenereerdeEmail("");
-    setGegenereerdOnderwerp("");
+const handleGenereer = async () => {
+  setGegenereerdeEmail("");
+  setGegenereerdOnderwerp("");
 
-    const isAntwoord = tab === "antwoord";
-    const payload = isAntwoord
-      ? {
-          ...formData,
-          isAntwoord: true,
-          naamAfzender: formData.naamOntvanger,
-          naamOntvanger: formData.naamAfzender,
-        }
-      : {
-          ...formData,
-          isAntwoord: false,
-        };
+  const isAntwoord = tab === "antwoord";
+  const payload = isAntwoord
+    ? {
+        ...formData,
+        isAntwoord: true,
+        naamAfzender: formData.naamOntvanger,
+        naamOntvanger: formData.naamAfzender,
+      }
+    : {
+        ...formData,
+        isAntwoord: false,
+      };
 
-    try {
-      const response = await fetch("/api/genereer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+  try {
+    const response = await fetch("/api/genereer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Fout bij genereren van e-mail.");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Fout bij genereren van e-mail.");
 
-      setGegenereerdeEmail(data.email || "");
-      setGegenereerdOnderwerp(data.onderwerp || "");
-    } catch (error) {
-      alert("Er ging iets mis met AI.");
-    }
-  };
+    setGegenereerdeEmail(data.email || "");
+    setGegenereerdOnderwerp(data.onderwerp || "");
+  } catch {
+    alert("Er ging iets mis met AI.");
+  }
+};
 
 // Form velden per tab
 const renderFields = () => {
