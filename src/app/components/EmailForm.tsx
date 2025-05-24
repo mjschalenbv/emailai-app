@@ -448,7 +448,7 @@ export default function EmailForm() {
               value={formData.onderwerpNieuwsbrief || ""}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
-              placeholder="Bijvoorbeeld: Juni nieuwsbrief – Zomeractie!"
+              placeholder="Bijvoorbeeld: Juni nieuwsbrief - Zomeractie!"
             />
           </section>
           {/* Doelgroep & Stijl naast elkaar */}
@@ -463,7 +463,7 @@ export default function EmailForm() {
               >
                 <option value="Klanten">Klanten</option>
                 <option value="Leads">Leads</option>
-                <option value="Collega's">Collega's</option>
+                <option value="Collega's">Collega&#39;s</option>
                 <option value="Partners">Partners</option>
                 <option value="Anders">Anders...</option>
               </select>
@@ -505,7 +505,7 @@ export default function EmailForm() {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
               >
                 <option value="Kort">Kort (1 alinea)</option>
-                <option value="Gemiddeld">Gemiddeld (2-3 alinea’s)</option>
+                <option value="Gemiddeld">Gemiddeld (2-3 alinea&#39;s)</option>
                 <option value="Lang">Lang/Uitgebreid</option>
               </select>
             </div>
