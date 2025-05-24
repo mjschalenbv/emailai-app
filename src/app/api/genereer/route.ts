@@ -18,8 +18,19 @@ export async function POST(req: Request) {
     antwoordWens,
     emailTekst,
     isAntwoord,
+    isNieuwsbrief,
+    // Nieuwsbrief extra fields
+    bedrijfsnaamNieuwsbrief,
+    bedrijfTypeNieuwsbrief,
+    onderwerpNieuwsbrief,
+    doelgroepNieuwsbrief,
+    stijlNieuwsbrief,
+    puntenNieuwsbrief,
+    lengteNieuwsbrief,
+    ctaNieuwsbrief,
   } = await req.json();
 
+  // Nummer-context samenstellen (voor zakelijke e-mail)
   const nummerContext =
     nummer && nummerType
       ? `Het ${nummerType} is: ${nummer}.`
@@ -27,8 +38,9 @@ export async function POST(req: Request) {
 
   let systemPrompt = "";
 
- if (isAntwoord) {
-  systemPrompt = `
+  // ---- ANTWOORD OP E-MAIL ----
+  if (isAntwoord) {
+    systemPrompt = `
 Je bent een professionele e-mailschrijver. Schrijf een zakelijk, kort en duidelijk antwoord op de onderstaande e-mail.
 
 Ontvangen e-mail:
@@ -69,9 +81,11 @@ Antwoord ALLEEN als geldig JSON, bijvoorbeeld:
 }
 Dus: GEEN uitleg of tekst buiten het JSON blok!
 `.trim();
+  }
 
-} else {
-  systemPrompt = `
+  // ---- GENEREREN VAN EEN ZAKELIJKE E-MAIL ----
+  else if (!isNieuwsbrief) {
+    systemPrompt = `
 Je bent een professionele e-mailschrijver.
 
 Schrijf een zakelijke, duidelijke e-mail (géén WhatsApp-stijl, niet te formeel of langdradig).
@@ -101,20 +115,62 @@ Voorbeeld:
   "email": "..."
 }
 `.trim();
-}
+  }
 
+  // ---- GENEREREN VAN EEN NIEUWSBRIEF ----
+  else if (isNieuwsbrief) {
+    // Hier alles verwerken wat de nieuwsbrief AI perfect maakt!
+    systemPrompt = `
+Je bent een professionele copywriter en expert in het schrijven van krachtige, effectieve en conversiegerichte nieuwsbrieven.
+
+Maak een perfecte zakelijke nieuwsbrief, afgestemd op onderstaande gegevens van het bedrijf en doelgroep. Houd rekening met toon, doelgroep, lengte, en gebruik altijd pakkende zinnen, een heldere structuur, en indien mogelijk een aantrekkelijke call-to-action.
+
+**Bedrijfsgegevens:**
+- Bedrijfsnaam/afzender: "${bedrijfsnaamNieuwsbrief || "[NIET INGEVULD]"}"
+- Type bedrijf: "${bedrijfTypeNieuwsbrief || "[NIET INGEVULD]"}"
+${ctaNieuwsbrief ? `- Website/call-to-action: "${ctaNieuwsbrief}"` : ""}
+
+**Nieuwsbrief details:**
+- Onderwerp: "${onderwerpNieuwsbrief || "[NIET INGEVULD]"}"
+- Doelgroep: "${doelgroepNieuwsbrief || "[NIET INGEVULD]"}"
+- Stijl/tone-of-voice: "${stijlNieuwsbrief || "[NIET INGEVULD]"}"
+- Belangrijkste punten (content): "${puntenNieuwsbrief || "[NIET INGEVULD]"}"
+- Lengte: "${lengteNieuwsbrief || "[NIET INGEVULD]"}"
+
+**AANWIJZINGEN:**
+- De nieuwsbrief moet relevant en waardevol zijn voor de doelgroep.
+- Maak het intro pakkend (geen open deuren), daarna vlot naar de hoofdpunten.
+- Sluit af met een relevante, aansprekende call-to-action die past bij de doelgroep en het bedrijf (indien opgegeven).
+- Taal: ${taal}
+- Houd de schrijfstijl altijd zakelijk, inspirerend en uitnodigend, zonder clichés.
+- Gebruik eventueel subtiele marketing, geen harde verkooppraat.
+- Voorkom herhaling.
+- Schrijf zo natuurlijk mogelijk, zoals de beste copywriters dat doen.
+- Geef als output ALLEEN geldig JSON terug:
+
+Voorbeeld:
+{
+  "onderwerp": "Juni nieuwsbrief – Zomeractie!",
+  "email": "..."
+}
+**GEEN uitleg of tekst buiten het JSON blok!**
+`.trim();
+  }
+
+  // --- AI AANROEP ---
   const messages: ChatCompletionMessageParam[] = [
     { role: "system", content: systemPrompt }
   ];
 
+  // Alleen bij antwoorden mag je ook de originele e-mail toevoegen als 'user' message
   if (isAntwoord && emailTekst) {
     messages.push({ role: "user", content: emailTekst });
   }
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-4o", // TOPMODEL!
     messages,
-    temperature: 0.3,
+    temperature: 0.27, // Licht creatief, altijd professioneel
   });
 
   const antwoord = completion.choices[0]?.message?.content?.trim();
@@ -130,7 +186,7 @@ Voorbeeld:
       email: aiJson.email || "",
     });
   } catch (e) {
-  console.error("JSON-parsing mislukt in GENEREER:", antwoord, e);
+    console.error("JSON-parsing mislukt in GENEREER:", antwoord, e);
     return NextResponse.json({
       error: "AI gaf geen geldige JSON (genereer)",
       debug_antwoord: antwoord,
