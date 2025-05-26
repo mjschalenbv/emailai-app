@@ -7,6 +7,22 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: Request) {
+  const data = await req.json();
+
+  // --- Validatie (zet aan naar wens) ---
+  if (!data.taal) return NextResponse.json({ error: "Taal ontbreekt" }, { status: 400 });
+
+  // Nieuwsbrief validatie
+  if (data.isNieuwsbrief) {
+    if (!data.bedrijfsnaamNieuwsbrief) return NextResponse.json({ error: "Bedrijfsnaam ontbreekt" }, { status: 400 });
+    if (!data.bedrijfTypeNieuwsbrief) return NextResponse.json({ error: "Bedrijfstype ontbreekt" }, { status: 400 });
+    if (!data.onderwerpNieuwsbrief) return NextResponse.json({ error: "Onderwerp nieuwsbrief ontbreekt" }, { status: 400 });
+    if (!data.doelgroepNieuwsbrief) return NextResponse.json({ error: "Doelgroep nieuwsbrief ontbreekt" }, { status: 400 });
+    if (!data.stijlNieuwsbrief) return NextResponse.json({ error: "Stijl nieuwsbrief ontbreekt" }, { status: 400 });
+    if (!data.puntenNieuwsbrief) return NextResponse.json({ error: "Punten nieuwsbrief ontbreekt" }, { status: 400 });
+    if (!data.lengteNieuwsbrief) return NextResponse.json({ error: "Lengte nieuwsbrief ontbreekt" }, { status: 400 });
+  }
+
   const {
     taal,
     naamAfzender,
@@ -19,7 +35,6 @@ export async function POST(req: Request) {
     emailTekst,
     isAntwoord,
     isNieuwsbrief,
-    // Nieuwsbrief extra fields
     bedrijfsnaamNieuwsbrief,
     bedrijfTypeNieuwsbrief,
     onderwerpNieuwsbrief,
@@ -28,9 +43,8 @@ export async function POST(req: Request) {
     puntenNieuwsbrief,
     lengteNieuwsbrief,
     ctaNieuwsbrief,
-  } = await req.json();
+  } = data;
 
-  // Nummer-context samenstellen (voor zakelijke e-mail)
   const nummerContext =
     nummer && nummerType
       ? `Het ${nummerType} is: ${nummer}.`
@@ -168,9 +182,9 @@ Voorbeeld:
   }
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o", // TOPMODEL!
+    model: "gpt-4o",
     messages,
-    temperature: 0.27, // Licht creatief, altijd professioneel
+    temperature: 0.27,
   });
 
   const antwoord = completion.choices[0]?.message?.content?.trim();
@@ -180,7 +194,13 @@ Voorbeeld:
   }
 
   try {
-    const aiJson = JSON.parse(antwoord);
+    // Verwijder eventuele codeblokken als OpenAI output geeft als ```json ... ```
+    let cleanAntwoord = antwoord
+      .replace(/^\s*```json\s*/i, "")
+      .replace(/^\s*```\s*/i, "")
+      .replace(/\s*```\s*$/i, "")
+      .trim();
+    const aiJson = JSON.parse(cleanAntwoord);
     return NextResponse.json({
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
