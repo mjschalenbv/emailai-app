@@ -195,11 +195,11 @@ Voorbeeld:
 
   try {
     // Verwijder eventuele codeblokken als OpenAI output geeft als ```json ... ```
-    let cleanAntwoord = antwoord
-      .replace(/^\s*```json\s*/i, "")
-      .replace(/^\s*```\s*/i, "")
-      .replace(/\s*```\s*$/i, "")
-      .trim();
+const cleanAntwoord = antwoord
+  .replace(/^\s*```json\s*/i, "")
+  .replace(/^\s*```\s*/i, "")
+  .replace(/\s*```\s*$/i, "")
+  .trim();
     const aiJson = JSON.parse(cleanAntwoord);
     return NextResponse.json({
       onderwerp: aiJson.onderwerp || "",
