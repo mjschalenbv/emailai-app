@@ -17,7 +17,6 @@ type BedrijfType =
   | "Anders";
 
 type EmailFormData = {
-  // Voor e-mail/antwoord
   emailTekst: string;
   taal: string;
   naamAfzender: string;
@@ -27,7 +26,6 @@ type EmailFormData = {
   nummerType: NummerType;
   context: string;
   antwoordWens: string;
-  // Voor nieuwsbrief
   bedrijfsnaamNieuwsbrief: string;
   bedrijfTypeNieuwsbrief: BedrijfType;
   websiteNieuwsbrief: string;
@@ -60,7 +58,6 @@ const bedrijfTypes: { value: BedrijfType; label: string }[] = [
 
 export default function EmailForm() {
   const [tab, setTab] = useState<"nieuw" | "antwoord" | "nieuwsbrief">("nieuw");
-
   const [formData, setFormData] = useState<EmailFormData>({
     emailTekst: "",
     taal: "Nederlands",
@@ -71,7 +68,6 @@ export default function EmailForm() {
     nummerType: "",
     context: "",
     antwoordWens: "",
-    // nieuwsbrief
     bedrijfsnaamNieuwsbrief: "",
     bedrijfTypeNieuwsbrief: "",
     websiteNieuwsbrief: "",
@@ -147,15 +143,13 @@ export default function EmailForm() {
     }
   };
 
-  // Form velden per tab
   const renderFields = () => {
     if (tab === "nieuw") {
-      // Nieuwe e-mail
       return (
         <>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Taal</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Taal</label>
               <select
                 name="taal"
                 value={formData.taal}
@@ -169,7 +163,7 @@ export default function EmailForm() {
               </select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Benadering</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Benadering</label>
               <select
                 name="benadering"
                 value={formData.benadering}
@@ -183,9 +177,9 @@ export default function EmailForm() {
               </select>
             </div>
           </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Naam ontvanger</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Naam ontvanger</label>
               <input
                 type="text"
                 name="naamOntvanger"
@@ -195,7 +189,7 @@ export default function EmailForm() {
               />
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Naam afzender</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Naam afzender</label>
               <input
                 type="text"
                 name="naamAfzender"
@@ -206,17 +200,17 @@ export default function EmailForm() {
             </div>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Nummer</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Nummer</label>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <input
                 type="text"
                 name="nummer"
                 value={formData.nummer}
                 onChange={handleChange}
-                className="w-full sm:w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+                className="w-full sm:w-[160px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
                 placeholder="Optioneel"
               />
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2">
                 {nummerTypes.map((nt) => (
                   <div
                     key={nt.value}
@@ -232,7 +226,7 @@ export default function EmailForm() {
                   >
                     <span
                       className={`
-                        w-6 h-6 mr-2 flex items-center justify-center border-2 rounded
+                        w-6 h-6 mr-1 flex items-center justify-center border-2 rounded
                         ${formData.nummerType === nt.value ? "border-blue-600 bg-blue-600" : "border-gray-400 bg-white"}
                         transition-colors duration-200
                       `}
@@ -243,14 +237,14 @@ export default function EmailForm() {
                         </svg>
                       )}
                     </span>
-                    <span className="text-gray-900 text-sm font-medium">{nt.label}</span>
+                    <span className="text-gray-900 text-xs md:text-sm font-medium">{nt.label}</span>
                   </div>
                 ))}
               </div>
             </div>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Waar gaat de e-mail over?
             </label>
             <textarea
@@ -269,7 +263,7 @@ export default function EmailForm() {
       return (
         <>
           <section>
-            <label className="block mb-2 text-base font-semibold text-gray-700">
+            <label className="block mb-1 md:mb-2 text-base font-semibold text-gray-700">
               Plak hier de e-mail waarop je wilt antwoorden
             </label>
             <textarea
@@ -281,9 +275,9 @@ export default function EmailForm() {
               required
             />
           </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Taal</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Taal</label>
               <select
                 name="taal"
                 value={formData.taal}
@@ -297,7 +291,7 @@ export default function EmailForm() {
               </select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Benadering</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Benadering</label>
               <select
                 name="benadering"
                 value={formData.benadering}
@@ -311,9 +305,9 @@ export default function EmailForm() {
               </select>
             </div>
           </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Naam ontvanger</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Naam ontvanger</label>
               <input
                 type="text"
                 name="naamOntvanger"
@@ -323,7 +317,7 @@ export default function EmailForm() {
               />
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Naam afzender</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Naam afzender</label>
               <input
                 type="text"
                 name="naamAfzender"
@@ -334,17 +328,17 @@ export default function EmailForm() {
             </div>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Nummer</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Nummer</label>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <input
                 type="text"
                 name="nummer"
                 value={formData.nummer}
                 onChange={handleChange}
-                className="w-full sm:w-[200px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+                className="w-full sm:w-[160px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
                 placeholder="Optioneel"
               />
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2">
                 {nummerTypes.map((nt) => (
                   <div
                     key={nt.value}
@@ -360,7 +354,7 @@ export default function EmailForm() {
                   >
                     <span
                       className={`
-                        w-6 h-6 mr-2 flex items-center justify-center border-2 rounded
+                        w-6 h-6 mr-1 flex items-center justify-center border-2 rounded
                         ${formData.nummerType === nt.value ? "border-blue-600 bg-blue-600" : "border-gray-400 bg-white"}
                         transition-colors duration-200
                       `}
@@ -371,14 +365,14 @@ export default function EmailForm() {
                         </svg>
                       )}
                     </span>
-                    <span className="text-gray-900 text-sm font-medium">{nt.label}</span>
+                    <span className="text-gray-900 text-xs md:text-sm font-medium">{nt.label}</span>
                   </div>
                 ))}
               </div>
             </div>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Wat wil je antwoorden op deze e-mail?
             </label>
             <textarea
@@ -394,11 +388,10 @@ export default function EmailForm() {
       );
     }
     if (tab === "nieuwsbrief") {
-      // Nieuwsbrief tab
       return (
         <>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Bedrijfsnaam of naam afzender
             </label>
             <input
@@ -411,7 +404,7 @@ export default function EmailForm() {
             />
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Wat voor soort bedrijf heb je?
             </label>
             <select
@@ -428,7 +421,7 @@ export default function EmailForm() {
             </select>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Website van je bedrijf (optioneel)
             </label>
             <input
@@ -441,7 +434,7 @@ export default function EmailForm() {
             />
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Onderwerp nieuwsbrief</label>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Onderwerp nieuwsbrief</label>
             <input
               type="text"
               name="onderwerpNieuwsbrief"
@@ -451,10 +444,9 @@ export default function EmailForm() {
               placeholder="Bijvoorbeeld: Juni nieuwsbrief - Zomeractie!"
             />
           </section>
-          {/* Doelgroep & Stijl naast elkaar */}
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Doelgroep</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Doelgroep</label>
               <select
                 name="doelgroepNieuwsbrief"
                 value={formData.doelgroepNieuwsbrief || ""}
@@ -469,7 +461,7 @@ export default function EmailForm() {
               </select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Stijl van de nieuwsbrief</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Stijl van de nieuwsbrief</label>
               <select
                 name="stijlNieuwsbrief"
                 value={formData.stijlNieuwsbrief || ""}
@@ -483,7 +475,7 @@ export default function EmailForm() {
             </div>
           </section>
           <section>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
               Belangrijkste punten (waar gaat de nieuwsbrief over?)
             </label>
             <textarea
@@ -495,9 +487,9 @@ export default function EmailForm() {
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
             />
           </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Lengte van de nieuwsbrief</label>
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Lengte van de nieuwsbrief</label>
               <select
                 name="lengteNieuwsbrief"
                 value={formData.lengteNieuwsbrief || ""}
@@ -510,7 +502,7 @@ export default function EmailForm() {
               </select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
+              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">
                 Call to action (optioneel)
               </label>
               <input
@@ -532,15 +524,14 @@ export default function EmailForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto my-12 bg-white rounded-2xl shadow-2xl px-8 py-10 space-y-10"
+      className="max-w-full sm:max-w-2xl mx-auto my-6 sm:my-12 bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl px-3 sm:px-8 py-5 sm:py-10 space-y-6 sm:space-y-10"
       style={{ fontFamily: "Inter, Arial, sans-serif" }}
     >
-      {/* Tab Switch */}
-      <div className="flex gap-4 mb-10 justify-center">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-10 justify-center">
         <button
           type="button"
           onClick={() => setTab("nieuw")}
-          className={`text-xl font-bold px-8 py-4 rounded-t-xl border-b-4 ${
+          className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
             tab === "nieuw"
               ? "bg-blue-600 text-white border-blue-800 shadow-lg"
               : "bg-gray-100 text-gray-800 border-transparent hover:bg-blue-50"
@@ -551,7 +542,7 @@ export default function EmailForm() {
         <button
           type="button"
           onClick={() => setTab("antwoord")}
-          className={`text-xl font-bold px-8 py-4 rounded-t-xl border-b-4 ${
+          className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
             tab === "antwoord"
               ? "bg-green-600 text-white border-green-800 shadow-lg"
               : "bg-gray-100 text-gray-800 border-transparent hover:bg-green-50"
@@ -562,7 +553,7 @@ export default function EmailForm() {
         <button
           type="button"
           onClick={() => setTab("nieuwsbrief")}
-          className={`text-xl font-bold px-8 py-4 rounded-t-xl border-b-4 ${
+          className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
             tab === "nieuwsbrief"
               ? "bg-purple-600 text-white border-purple-800 shadow-lg"
               : "bg-gray-100 text-gray-800 border-transparent hover:bg-purple-50"
@@ -571,22 +562,18 @@ export default function EmailForm() {
           Genereer nieuwsbrief
         </button>
       </div>
-
-      {/* Form fields per tab */}
       {renderFields()}
-
-      {/* Actieknop */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-3 sm:pt-4">
         <button
           type="button"
           onClick={handleGenereer}
-          className={`${
+          className={`w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 rounded-xl font-semibold ${
             tab === "nieuw"
               ? "bg-blue-600 hover:bg-blue-700"
               : tab === "antwoord"
               ? "bg-green-600 hover:bg-green-700"
               : "bg-purple-600 hover:bg-purple-700"
-          } text-white font-semibold px-8 py-3 rounded-xl text-lg transition`}
+          } text-white transition`}
         >
           {tab === "nieuw"
             ? "Genereer e-mail"
@@ -595,25 +582,23 @@ export default function EmailForm() {
             : "Genereer nieuwsbrief"}
         </button>
       </div>
-
-      {/* Output */}
       {gegenereerdeEmail && (
-        <div className="mt-8 space-y-4">
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center justify-between">
+        <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <label className="block mb-1 font-semibold text-gray-700">Onderwerp</label>
-              <span className="block text-base text-gray-800 font-medium">{gegenereerdOnderwerp || "(geen onderwerp)"}</span>
+              <span className="block text-base text-gray-800 font-medium break-words">{gegenereerdOnderwerp || "(geen onderwerp)"}</span>
             </div>
             <button
               type="button"
               onClick={() => handleCopy(gegenereerdOnderwerp, "subject")}
-              className="ml-4 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-semibold transition"
+              className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-semibold transition"
             >
               {copyFeedback.type === "subject" ? "Gekopieerd!" : "Kopieer"}
             </button>
           </div>
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
               <label className="font-semibold text-gray-700">E-mailtekst</label>
               <button
                 type="button"
