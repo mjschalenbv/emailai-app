@@ -453,6 +453,7 @@ export default function EmailForm() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
               >
+                <option value="">Kies doelgroep...</option>
                 <option value="Klanten">Klanten</option>
                 <option value="Leads">Leads</option>
                 <option value="Collega's">Collega&#39;s</option>
@@ -468,6 +469,7 @@ export default function EmailForm() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
               >
+                 <option value="">Kies stijl...</option>
                 <option value="Neutraal">Neutraal</option>
                 <option value="Marketing">Marketing gericht (verkoop)</option>
                 <option value="Informatief">Informatief</option>
@@ -496,6 +498,7 @@ export default function EmailForm() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
               >
+                <option value="">Kies lengte...</option>
                 <option value="Kort">Kort (1 alinea)</option>
                 <option value="Gemiddeld">Gemiddeld (2-3 alinea&#39;s)</option>
                 <option value="Lang">Lang/Uitgebreid</option>

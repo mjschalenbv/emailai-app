@@ -9,10 +9,8 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   const data = await req.json();
 
-  // --- Validatie (zet aan naar wens) ---
   if (!data.taal) return NextResponse.json({ error: "Taal ontbreekt" }, { status: 400 });
 
-  // Nieuwsbrief validatie
   if (data.isNieuwsbrief) {
     if (!data.bedrijfsnaamNieuwsbrief) return NextResponse.json({ error: "Bedrijfsnaam ontbreekt" }, { status: 400 });
     if (!data.bedrijfTypeNieuwsbrief) return NextResponse.json({ error: "Bedrijfstype ontbreekt" }, { status: 400 });
@@ -52,7 +50,6 @@ export async function POST(req: Request) {
 
   let systemPrompt = "";
 
-  // ---- ANTWOORD OP E-MAIL ----
   if (isAntwoord) {
     systemPrompt = `
 Je bent een professionele e-mailschrijver. Schrijf een zakelijk, kort en duidelijk antwoord op de onderstaande e-mail.
@@ -95,10 +92,7 @@ Antwoord ALLEEN als geldig JSON, bijvoorbeeld:
 }
 Dus: GEEN uitleg of tekst buiten het JSON blok!
 `.trim();
-  }
-
-  // ---- GENEREREN VAN EEN ZAKELIJKE E-MAIL ----
-  else if (!isNieuwsbrief) {
+  } else if (!isNieuwsbrief) {
     systemPrompt = `
 Je bent een professionele e-mailschrijver.
 
@@ -129,11 +123,7 @@ Voorbeeld:
   "email": "..."
 }
 `.trim();
-  }
-
-  // ---- GENEREREN VAN EEN NIEUWSBRIEF ----
-  else if (isNieuwsbrief) {
-    // Hier alles verwerken wat de nieuwsbrief AI perfect maakt!
+  } else if (isNieuwsbrief) {
     systemPrompt = `
 Je bent een professionele copywriter en expert in het schrijven van krachtige, effectieve en conversiegerichte nieuwsbrieven.
 
@@ -171,12 +161,9 @@ Voorbeeld:
 `.trim();
   }
 
-  // --- AI AANROEP ---
   const messages: ChatCompletionMessageParam[] = [
     { role: "system", content: systemPrompt }
   ];
-
-  // Alleen bij antwoorden mag je ook de originele e-mail toevoegen als 'user' message
   if (isAntwoord && emailTekst) {
     messages.push({ role: "user", content: emailTekst });
   }
@@ -194,12 +181,12 @@ Voorbeeld:
   }
 
   try {
-    // Verwijder eventuele codeblokken als OpenAI output geeft als ```json ... ```
-const cleanAntwoord = antwoord
-  .replace(/^\s*```json\s*/i, "")
-  .replace(/^\s*```\s*/i, "")
-  .replace(/\s*```\s*$/i, "")
-  .trim();
+    // Verwijder ALLES buiten het eerste JSON-blok (maakt niet uit wat de AI doet!)
+    const firstCurly = antwoord.indexOf("{");
+    const lastCurly = antwoord.lastIndexOf("}");
+    if (firstCurly === -1 || lastCurly === -1) throw new Error("Geen JSON gevonden");
+    const cleanAntwoord = antwoord.slice(firstCurly, lastCurly + 1);
+
     const aiJson = JSON.parse(cleanAntwoord);
     return NextResponse.json({
       onderwerp: aiJson.onderwerp || "",
