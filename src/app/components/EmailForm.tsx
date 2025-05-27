@@ -83,7 +83,7 @@ const translations = {
     emailText: "E-mailtekst",
     noSubject: "(geen onderwerp)",
     emailPurpose: "Doel van de e-mail",
-    
+
 emailPurposeOptions: [
   { value: "", label: "Kies doel..." }, 
   { value: "afspraak", label: "Afspraak maken" },
@@ -638,7 +638,6 @@ type EmailFormData = {
 };
 
 export default function EmailForm() {
-  const taalOpties = Object.keys(translations) as (keyof typeof translations)[];
   const [tab, setTab] = useState<"nieuw" | "antwoord" | "nieuwsbrief">("nieuw");
   const [formData, setFormData] = useState<EmailFormData>({
     emailTekst: "",
