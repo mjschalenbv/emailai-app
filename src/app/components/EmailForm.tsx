@@ -641,7 +641,7 @@ export default function EmailForm() {
   const [tab, setTab] = useState<"nieuw" | "antwoord" | "nieuwsbrief">("nieuw");
   const [formData, setFormData] = useState<EmailFormData>({
     emailTekst: "",
-    taal: "Nederlands",
+    taal: "Engels",
     naamAfzender: "",
     naamOntvanger: "",
     benadering: translations["Nederlands"].approaches[0],
@@ -1088,11 +1088,21 @@ export default function EmailForm() {
 
   // --- UI ---
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-full sm:max-w-2xl mx-auto my-6 sm:my-12 bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl px-3 sm:px-8 py-5 sm:py-10 space-y-6 sm:space-y-10"
-      style={{ fontFamily: "Inter, Arial, sans-serif" }}
-    >
+<form
+  onSubmit={handleSubmit}
+  className="
+    max-w-full
+    sm:max-w-2xl
+    md:max-w-3xl
+    lg:max-w-4xl
+    mx-auto my-6 sm:my-12
+    bg-white rounded-xl sm:rounded-2xl
+    shadow-xl sm:shadow-2xl
+    px-4 sm:px-8 py-5 sm:py-10
+    space-y-6 sm:space-y-10
+  "
+  style={{ fontFamily: "Inter, Arial, sans-serif" }}
+>
    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6 justify-center">
   <button
     type="button"
@@ -1130,10 +1140,7 @@ export default function EmailForm() {
 </div>
 
 {/* Universele Taalkeuze */}
-<div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-2 sm:mb-6 justify-center items-center">
-  <label className="block font-medium text-gray-700">
-    Language:
-  </label>
+<div className="flex justify-center mb-2 sm:mb-6">
   <select
     name="taal"
     value={formData.taal}
@@ -1144,7 +1151,7 @@ export default function EmailForm() {
         benadering: translations[e.target.value as keyof typeof translations].approaches[0],
       }))
     }
-    className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 min-w-[160px]"
+    className="w-48 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-base"
   >
     <option value="Engels">English</option>
     <option value="Nederlands">Nederlands</option>
