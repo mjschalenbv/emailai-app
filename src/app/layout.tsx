@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// 👇 Analytics import toevoegen
 import { Analytics } from '@vercel/analytics/react';
 
-// Fonts instellen
+// Fonts config
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -15,14 +14,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Metadata voor SEO, socials & favicon
+// Metadata for SEO, social sharing & favicon
 export const metadata: Metadata = {
-  title: "EmailAI – Jouw AI e-mailassistent",
-  description: "Snel e-mails of antwoorden genereren met AI!",
+  title: "EmailAI – Your AI Email Assistant",
+  description: "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
   metadataBase: new URL("https://www.emailai.nl"),
   openGraph: {
-    title: "EmailAI – Jouw AI e-mailassistent",
-    description: "Snel e-mails of antwoorden genereren met AI!",
+    title: "EmailAI – Your AI Email Assistant",
+    description: "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
     url: "https://www.emailai.nl",
     siteName: "EmailAI",
     images: [
@@ -30,16 +29,16 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Voorbeeld van een gegenereerde e-mail met EmailAI",
+        alt: "Example of a generated email with EmailAI",
       },
     ],
-    locale: "nl_NL",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "EmailAI – Jouw AI e-mailassistent",
-    description: "Snel e-mails of antwoorden genereren met AI!",
+    title: "EmailAI – Your AI Email Assistant",
+    description: "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -57,10 +56,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-        {/* 👇 Analytics toevoegen, direct na {children} */}
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen flex flex-col`}>
+        <main className="flex-grow flex flex-col">{children}</main>
+        {/* Global footer */}
+        <footer className="w-full flex justify-center py-6 bg-transparent text-gray-400 text-sm">
+          <a
+            href="/privacy"
+            className="hover:underline"
+            target="_self"
+            rel="noopener noreferrer"
+          >
+            Privacy Policy
+          </a>
+        </footer>
         <Analytics />
       </body>
     </html>
