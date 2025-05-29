@@ -376,7 +376,6 @@ const GOAL_OPTIONS: Record<LanguageKey, string[]> = {
 
 // Start component
 const HASHTAG_OPTIONS = ["noHashtags", "viral", "few", "many", "custom"] as const;
-type HashtagOption = typeof HASHTAG_OPTIONS[number];
 
 export default function SocialPostPage() {
   // State
