@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "EmailAI",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://www.emailai.nl/og-image.png", // <-- Absolute URL!
         width: 1200,
         height: 630,
         alt: "EmailAI – Example of generated content",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "EmailAI – Your AI Email Assistant",
     description:
       "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
-    images: ["https://www.emailai.nl/og-image.png"], // <--- DIT IS DE FIX!
+    images: ["https://www.emailai.nl/og-image.png"], // <-- Absolute URL!
   },
   icons: {
     icon: [
@@ -52,7 +52,6 @@ export const metadata: Metadata = {
     apple: ["/favicon.png"],
   },
 };
-
 
 export default function RootLayout({
   children,
@@ -73,7 +72,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 sm:py-3">
             <Link
               href="/"
-               className="flex items-center gap-2 sm:gap-3 group min-w-0 pl-4 md:pl-22"
+              className="flex items-center gap-2 sm:gap-3 group min-w-0 pl-4 md:pl-22"
               style={{ minWidth: 0 }}
             >
               <Image
@@ -89,15 +88,14 @@ export default function RootLayout({
                 EmailAI
               </span>
             </Link>
-<nav className="flex items-center justify-end w-full">
-<Link
-  href="/contact"
-  className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
->
-  Contact & Support
-</Link>
-</nav>
-
+            <nav className="flex items-center justify-end w-full">
+              <Link
+                href="/contact"
+                className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
+              >
+                Contact & Support
+              </Link>
+            </nav>
           </div>
         </header>
         <main className="flex-1 w-full flex flex-col items-center justify-center relative z-10">
