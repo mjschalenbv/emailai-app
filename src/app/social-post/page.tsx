@@ -374,9 +374,7 @@ const GOAL_OPTIONS: Record<LanguageKey, string[]> = {
 
 // const translations: Record<LanguageKey, Translation> = { ... };
 
-// Start component
-const HASHTAG_OPTIONS = ["noHashtags", "viral", "few", "many", "custom"] as const;
-
+// Geen HASHTAG_OPTIONS meer declareren als type, gewoon direct string!
 export default function SocialPostPage() {
   // State
   const [language, setLanguage] = useState<LanguageKey>("en");
@@ -386,7 +384,7 @@ export default function SocialPostPage() {
   const [tone, setTone] = useState<string>(translations["en"].tones[0]);
   const [emotion, setEmotion] = useState<string>(translations["en"].emotions[1]);
   const [length, setLength] = useState<string>(translations["en"].lengths[1]);
-  const [hashtagOption, setHashtagOption] = useState<HashtagOption>("noHashtags");
+  const [hashtagOption, setHashtagOption] = useState<string>("noHashtags");
   const [customHashtags, setCustomHashtags] = useState<string>("");
   const [postContent, setPostContent] = useState<string>("");
   const [callToAction, setCallToAction] = useState<string>(CTA_OPTIONS["en"][0]);
@@ -395,9 +393,9 @@ export default function SocialPostPage() {
   const [loading, setLoading] = useState<boolean>(false);
 
   // Voor dynamisch vertalen
- const t = translations[language];
+  const t = translations[language];
 
-    // Update velden bij taal-wissel
+  // Update velden bij taal-wissel
   React.useEffect(() => {
     setGoal(GOAL_OPTIONS[language][0]);
     setCallToAction(CTA_OPTIONS[language][0]);
@@ -406,320 +404,316 @@ export default function SocialPostPage() {
     setLength(translations[language].lengths[1]);
   }, [language]);
 
+  async function generatePost() {
+    setLoading(true);
+    setGeneratedPost("");
 
-
-async function generatePost() {
-  setLoading(true);
-  setGeneratedPost("");
-
-  // Zet hashtags als tekst, precies zoals backend verwacht
-  let hashtagsText = "";
-  switch (hashtagOption) {
-    case "viral":
-      hashtagsText = "#viral #trending #AI #emailai";
-      break;
-    case "few":
-      hashtagsText = "#social #email #ai";
-      break;
-    case "many":
-      hashtagsText = "#socialmedia #content #marketing #emailai #viral #ai #trending #digital";
-      break;
-    case "custom":
-      hashtagsText = customHashtags
-        .split(",")
-        .map((h) => (h.trim().startsWith("#") ? h.trim() : "#" + h.trim()))
-        .join(" ");
-      break;
-    default:
-      hashtagsText = "";
-  }
-
-// Logica voor custom fields
-const goalText = [
-  "Custom", "Zelf invullen", "Eigene Eingabe", "Personalizar", "Власний варіант", "Personnaliser"
-].includes(goal)
-  ? customGoal
-  : goal;
-
-const ctaText = [
-  "Custom", "Zelf invullen", "Eigene Aktion", "Personalizar", "Власний варіант", "Personnaliser"
-].includes(callToAction)
-  ? customCTA
-  : callToAction;
-
-  // Hier doe je een POST naar je eigen backend!
-  try {
-    const response = await fetch("/api/genereer/social", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        language,
-        platform,
-        hashtagOption,
-        customHashtags: hashtagsText,
-        goal,
-        customGoal,
-        tone,
-        emotion,
-        length,
-        callToAction,
-        customCTA: ctaText,
-        postContent,
-      }),
-    });
-    const data = await response.json();
-    if (data.error) {
-      setGeneratedPost("Er ging iets mis: " + data.error);
-    } else {
-      setGeneratedPost(data.post || "");
+    // Zet hashtags als tekst, precies zoals backend verwacht
+    let hashtagsText = "";
+    switch (hashtagOption) {
+      case "viral":
+        hashtagsText = "#viral #trending #AI #emailai";
+        break;
+      case "few":
+        hashtagsText = "#social #email #ai";
+        break;
+      case "many":
+        hashtagsText = "#socialmedia #content #marketing #emailai #viral #ai #trending #digital";
+        break;
+      case "custom":
+        hashtagsText = customHashtags
+          .split(",")
+          .map((h) => (h.trim().startsWith("#") ? h.trim() : "#" + h.trim()))
+          .join(" ");
+        break;
+      default:
+        hashtagsText = "";
     }
-  } catch (err) {
-    setGeneratedPost("Er is een technische fout opgetreden.");
-  }
-  setLoading(false);
-}
 
+    // Logica voor custom fields
+    const goalText = [
+      "Custom", "Zelf invullen", "Eigene Eingabe", "Personalizar", "Власний варіант", "Personnaliser"
+    ].includes(goal)
+      ? customGoal
+      : goal;
+
+    const ctaText = [
+      "Custom", "Zelf invullen", "Eigene Aktion", "Personalizar", "Власний варіант", "Personnaliser"
+    ].includes(callToAction)
+      ? customCTA
+      : callToAction;
+
+    try {
+      const response = await fetch("/api/genereer/social", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          language,
+          platform,
+          hashtagOption,
+          customHashtags: hashtagsText,
+          goal: goalText,
+          customGoal,
+          tone,
+          emotion,
+          length,
+          callToAction,
+          customCTA: ctaText,
+          postContent,
+        }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        setGeneratedPost("Er ging iets mis: " + data.error);
+      } else {
+        setGeneratedPost(data.post || "");
+      }
+    } catch {
+      setGeneratedPost("Er is een technische fout opgetreden.");
+    }
+    setLoading(false);
+  }
 
   function copyToClipboard() {
     navigator.clipboard.writeText(generatedPost);
     alert(t.copySuccess);
   }
 
-return (
-  <main className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 p-6 flex flex-col items-center">
-    <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-8 md:p-12">
-      {/* Language selector */}
-      <div className="mb-8 flex justify-end">
-        <select
-          className="border border-indigo-300 rounded-md px-3 py-2 text-indigo-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value as LanguageKey)}
-          aria-label="Select language"
-        >
-          {Object.keys(translations).map((key) => (
-            <option key={key} value={key}>
-              {(translations as Record<string, Translation>)[key].name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <h1 className="text-4xl font-extrabold mb-10 text-center text-indigo-900 drop-shadow-sm">
-        Social Post Generator
-      </h1>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          generatePost();
-        }}
-        className="space-y-8"
-      >
-        {/* Eerste regel: platform, hashtags, doel */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Platform */}
-          <div>
-            <label htmlFor="platform" className="block font-semibold mb-2 text-indigo-800">
-              {t.platform}
-            </label>
-            <select
-              id="platform"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-            >
-              {Object.entries(t.platforms).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-          {/* Hashtags */}
-          <div>
-            <label htmlFor="hashtags" className="block font-semibold mb-2 text-indigo-800">
-              {t.hashtags}
-            </label>
-            <select
-              id="hashtags"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={hashtagOption}
-              onChange={(e) => setHashtagOption(e.target.value as HashtagOption)}
-            >
-              <option value="noHashtags">{t.noHashtags}</option>
-              <option value="viral">{t.viral}</option>
-              <option value="few">{t.few}</option>
-              <option value="many">{t.many}</option>
-              <option value="custom">{t.custom}</option>
-            </select>
-            {hashtagOption === "custom" && (
-              <textarea
-                className="mt-2 w-full rounded-md border border-indigo-300 p-3 text-indigo-900 placeholder-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                rows={2}
-                placeholder={t.custom}
-                value={customHashtags}
-                onChange={(e) => setCustomHashtags(e.target.value)}
-              />
-            )}
-          </div>
-          {/* Doel */}
-          <div>
-            <label htmlFor="goal" className="block font-semibold mb-2 text-indigo-800">
-              {t.goal}
-            </label>
-            <select
-              id="goal"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-            >
-              {GOAL_OPTIONS[language].map((option) => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
-            {(goal === "Custom" || goal === "Zelf invullen" || goal === "Eigene Eingabe" || goal === "Personalizar" || goal === "Власний варіант" || goal === "Personnaliser") && (
-              <input
-                type="text"
-                className="mt-2 w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder={t.goalPlaceholder}
-                value={customGoal}
-                onChange={(e) => setCustomGoal(e.target.value)}
-              />
-            )}
-          </div>
-        </div>
-        {/* Tweede regel: toon, emotie, lengte */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label htmlFor="tone" className="block font-semibold mb-2 text-indigo-800">
-              {t.tone}
-            </label>
-            <select
-              id="tone"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
-            >
-              {t.tones.map((toneOption) => (
-                <option key={toneOption} value={toneOption}>
-                  {toneOption}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="emotion" className="block font-semibold mb-2 text-indigo-800">
-              {t.emotion}
-            </label>
-            <select
-              id="emotion"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={emotion}
-              onChange={(e) => setEmotion(e.target.value)}
-            >
-              {t.emotions.map((emotionOption) => (
-                <option key={emotionOption} value={emotionOption}>
-                  {emotionOption}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="length" className="block font-semibold mb-2 text-indigo-800">
-              {t.length}
-            </label>
-            <select
-              id="length"
-              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={length}
-              onChange={(e) => setLength(e.target.value)}
-            >
-              {t.lengths.map((lengthOption) => (
-                <option key={lengthOption} value={lengthOption}>
-                  {lengthOption}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {/* Derde regel: uitleg/content */}
-        <div>
-          <label htmlFor="postContent" className="block font-semibold mb-2 text-indigo-800">
-            {language === "en" ? "What should the post be about?" : language === "nl" ? "Waar moet je post over gaan?" : t.goalPlaceholder}
-          </label>
-          <textarea
-            id="postContent"
-            placeholder={
-              language === "en"
-                ? "Describe what the post should be about, the key message, or any details you want included."
-                : language === "nl"
-                ? "Omschrijf waar je post over moet gaan, of wat de belangrijkste boodschap is."
-                : t.goalPlaceholder
-            }
-            className="w-full rounded-md border border-indigo-300 p-3 text-indigo-900 placeholder-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            rows={4}
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
-            required
-          />
-        </div>
-        {/* Vierde regel: Call to Action */}
-        <div>
-          <label htmlFor="callToAction" className="block font-semibold mb-2 text-indigo-800">
-            {t.callToAction}
-          </label>
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 p-6 flex flex-col items-center">
+      <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-8 md:p-12">
+        {/* Language selector */}
+        <div className="mb-8 flex justify-end">
           <select
-            id="callToAction"
-            className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            value={callToAction}
-            onChange={(e) => setCallToAction(e.target.value)}
+            className="border border-indigo-300 rounded-md px-3 py-2 text-indigo-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as LanguageKey)}
+            aria-label="Select language"
           >
-            {CTA_OPTIONS[language].map((cta) => (
-              <option key={cta} value={cta}>
-                {cta}
+            {Object.keys(translations).map((key) => (
+              <option key={key} value={key}>
+                {(translations as Record<string, Translation>)[key].name}
               </option>
             ))}
           </select>
-          {(callToAction === "Custom" || callToAction === "Zelf invullen" || callToAction === "Eigene Aktion" || callToAction === "Personalizar" || callToAction === "Власний варіант" || callToAction === "Personnaliser") && (
-            <input
-              type="text"
-              className="mt-2 w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        </div>
+
+        <h1 className="text-4xl font-extrabold mb-10 text-center text-indigo-900 drop-shadow-sm">
+          Social Post Generator
+        </h1>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            generatePost();
+          }}
+          className="space-y-8"
+        >
+          {/* Platform, hashtags, doel */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Platform */}
+            <div>
+              <label htmlFor="platform" className="block font-semibold mb-2 text-indigo-800">
+                {t.platform}
+              </label>
+              <select
+                id="platform"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+              >
+                {Object.entries(t.platforms).map(([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Hashtags */}
+            <div>
+              <label htmlFor="hashtags" className="block font-semibold mb-2 text-indigo-800">
+                {t.hashtags}
+              </label>
+              <select
+                id="hashtags"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={hashtagOption}
+                onChange={(e) => setHashtagOption(e.target.value)}
+              >
+                <option value="noHashtags">{t.noHashtags}</option>
+                <option value="viral">{t.viral}</option>
+                <option value="few">{t.few}</option>
+                <option value="many">{t.many}</option>
+                <option value="custom">{t.custom}</option>
+              </select>
+              {hashtagOption === "custom" && (
+                <textarea
+                  className="mt-2 w-full rounded-md border border-indigo-300 p-3 text-indigo-900 placeholder-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  rows={2}
+                  placeholder={t.custom}
+                  value={customHashtags}
+                  onChange={(e) => setCustomHashtags(e.target.value)}
+                />
+              )}
+            </div>
+            {/* Doel */}
+            <div>
+              <label htmlFor="goal" className="block font-semibold mb-2 text-indigo-800">
+                {t.goal}
+              </label>
+              <select
+                id="goal"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+              >
+                {GOAL_OPTIONS[language].map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              {(goal === "Custom" || goal === "Zelf invullen" || goal === "Eigene Eingabe" || goal === "Personalizar" || goal === "Власний варіант" || goal === "Personnaliser") && (
+                <input
+                  type="text"
+                  className="mt-2 w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder={t.goalPlaceholder}
+                  value={customGoal}
+                  onChange={(e) => setCustomGoal(e.target.value)}
+                />
+              )}
+            </div>
+          </div>
+          {/* Tweede regel: toon, emotie, lengte */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label htmlFor="tone" className="block font-semibold mb-2 text-indigo-800">
+                {t.tone}
+              </label>
+              <select
+                id="tone"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={tone}
+                onChange={(e) => setTone(e.target.value)}
+              >
+                {t.tones.map((toneOption) => (
+                  <option key={toneOption} value={toneOption}>
+                    {toneOption}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="emotion" className="block font-semibold mb-2 text-indigo-800">
+                {t.emotion}
+              </label>
+              <select
+                id="emotion"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={emotion}
+                onChange={(e) => setEmotion(e.target.value)}
+              >
+                {t.emotions.map((emotionOption) => (
+                  <option key={emotionOption} value={emotionOption}>
+                    {emotionOption}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="length" className="block font-semibold mb-2 text-indigo-800">
+                {t.length}
+              </label>
+              <select
+                id="length"
+                className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={length}
+                onChange={(e) => setLength(e.target.value)}
+              >
+                {t.lengths.map((lengthOption) => (
+                  <option key={lengthOption} value={lengthOption}>
+                    {lengthOption}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {/* Derde regel: uitleg/content */}
+          <div>
+            <label htmlFor="postContent" className="block font-semibold mb-2 text-indigo-800">
+              {language === "en" ? "What should the post be about?" : language === "nl" ? "Waar moet je post over gaan?" : t.goalPlaceholder}
+            </label>
+            <textarea
+              id="postContent"
               placeholder={
                 language === "en"
-                  ? "Custom call to action..."
+                  ? "Describe what the post should be about, the key message, or any details you want included."
                   : language === "nl"
-                  ? "Eigen call to action..."
-                  : t.callToAction
+                  ? "Omschrijf waar je post over moet gaan, of wat de belangrijkste boodschap is."
+                  : t.goalPlaceholder
               }
-              value={customCTA}
-              onChange={(e) => setCustomCTA(e.target.value)}
+              className="w-full rounded-md border border-indigo-300 p-3 text-indigo-900 placeholder-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              rows={4}
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+              required
             />
-          )}
-        </div>
-        {/* Submit button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`mt-6 w-full rounded-md bg-indigo-600 py-3 text-white font-semibold shadow-md transition-colors ${
-            loading ? "cursor-not-allowed bg-indigo-400" : "hover:bg-indigo-700"
-          }`}
-        >
-          {loading ? "Loading..." : t.generatePost}
-        </button>
-      </form>
-      {generatedPost && (
-        <section className="mt-10 bg-indigo-50 rounded-md p-6 text-indigo-900 whitespace-pre-wrap shadow-inner">
-          <h2 className="text-xl font-semibold mb-4">{t.generatePost}</h2>
-        <pre className="mb-4 break-words whitespace-pre-wrap">{generatedPost}</pre>
+          </div>
+          {/* Vierde regel: Call to Action */}
+          <div>
+            <label htmlFor="callToAction" className="block font-semibold mb-2 text-indigo-800">
+              {t.callToAction}
+            </label>
+            <select
+              id="callToAction"
+              className="w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={callToAction}
+              onChange={(e) => setCallToAction(e.target.value)}
+            >
+              {CTA_OPTIONS[language].map((cta) => (
+                <option key={cta} value={cta}>
+                  {cta}
+                </option>
+              ))}
+            </select>
+            {(callToAction === "Custom" || callToAction === "Zelf invullen" || callToAction === "Eigene Aktion" || callToAction === "Personalizar" || callToAction === "Власний варіант" || callToAction === "Personnaliser") && (
+              <input
+                type="text"
+                className="mt-2 w-full rounded-md border border-indigo-300 px-4 py-2 text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder={
+                  language === "en"
+                    ? "Custom call to action..."
+                    : language === "nl"
+                    ? "Eigen call to action..."
+                    : t.callToAction
+                }
+                value={customCTA}
+                onChange={(e) => setCustomCTA(e.target.value)}
+              />
+            )}
+          </div>
+          {/* Submit button */}
           <button
-            onClick={copyToClipboard}
-            className="rounded-md bg-indigo-600 px-5 py-2 text-white font-semibold hover:bg-indigo-700 transition-colors"
+            type="submit"
+            disabled={loading}
+            className={`mt-6 w-full rounded-md bg-indigo-600 py-3 text-white font-semibold shadow-md transition-colors ${
+              loading ? "cursor-not-allowed bg-indigo-400" : "hover:bg-indigo-700"
+            }`}
           >
-            Copy
+            {loading ? "Loading..." : t.generatePost}
           </button>
-        </section>
-      )}
-    </div>
+        </form>
+        {generatedPost && (
+          <section className="mt-10 bg-indigo-50 rounded-md p-6 text-indigo-900 whitespace-pre-wrap shadow-inner">
+            <h2 className="text-xl font-semibold mb-4">{t.generatePost}</h2>
+            <pre className="mb-4 break-words whitespace-pre-wrap">{generatedPost}</pre>
+            <button
+              onClick={copyToClipboard}
+              className="rounded-md bg-indigo-600 px-5 py-2 text-white font-semibold hover:bg-indigo-700 transition-colors"
+            >
+              Copy
+            </button>
+          </section>
+        )}
+      </div>
     </main>
   );
 }
