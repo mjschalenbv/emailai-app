@@ -124,7 +124,7 @@ answerLengthOptions: [
     replyWhat: "What do you want to reply to this email?",
     replyPlaceholder: "For example: Ask for status update, thank, ask a new question, etc.",
     companyName: "Company name or sender name",
-    companyPlaceholder: "e.g.: John Smith / TechBouw Ltd.",
+    companyPlaceholder: "Your name or company",
     companyType: "What type of company do you have?",
     companyTypeOptions: [
       { value: "", label: "Choose company type..." },
@@ -168,7 +168,7 @@ answerLengthOptions: [
       { value: "Lang", label: "Long/Extended" },
     ],
     cta: "Call to action (optional)",
-    ctaPlaceholder: "e.g.: Visit our website, Order now",
+    ctaPlaceholder: "Try: “Visit our site” or “Order now",
     generate: "Generate email",
     generateReply: "Generate reply",
     generateNewsletter: "Generate newsletter",
@@ -640,6 +640,7 @@ type EmailFormData = {
 export default function EmailForm() {
   const [tab, setTab] = useState<"nieuw" | "antwoord" | "nieuwsbrief">("nieuw");
   const [formData, setFormData] = useState<EmailFormData>({
+
     emailTekst: "",
     taal: "Engels",
     naamAfzender: "",
@@ -740,7 +741,8 @@ export default function EmailForm() {
     name="doelEmail"
     value={formData.doelEmail || ""}
     onChange={handleChange}
-    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+   className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
   >
     {t.emailPurposeOptions.map((opt) => (
       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -754,7 +756,8 @@ export default function EmailForm() {
                 name="benadering"
                 value={formData.benadering}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
               >
                 {t.approaches.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -770,7 +773,8 @@ export default function EmailForm() {
                 name="naamOntvanger"
                 value={formData.naamOntvanger}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
               />
             </div>
             <div>
@@ -780,21 +784,21 @@ export default function EmailForm() {
                 name="naamAfzender"
                 value={formData.naamAfzender}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+             className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
               />
             </div>
           </section>
           <section>
             <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.number}</label>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <input
-                type="text"
-                name="nummer"
-                value={formData.nummer}
-                onChange={handleChange}
-                className="w-full sm:w-[160px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
-                placeholder={t.optioneel}
-              />
+       <input
+  type="text"
+  name="number"
+  placeholder="Optional"
+  className="max-w-xs w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
+/>
+
               <div className="flex flex-wrap gap-2">
                 {t.numberTypes.map((nt) => (
                   <div
@@ -835,7 +839,7 @@ export default function EmailForm() {
               value={formData.context}
               onChange={handleChange}
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               placeholder={t.placeholderContent}
             />
           </section>
@@ -852,7 +856,7 @@ export default function EmailForm() {
               value={formData.emailTekst}
               onChange={handleChange}
               rows={8}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-blue-200 shadow-sm"
+              className="w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
               required
             />
           </section>
@@ -863,7 +867,7 @@ export default function EmailForm() {
     name="antwoordLengte"
     value={formData.antwoordLengte || ""}
     onChange={handleChange}
-    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
   >
     {t.answerLengthOptions.map((opt) => (
       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -878,7 +882,7 @@ export default function EmailForm() {
                 name="benadering"
                 value={formData.benadering}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               >
                 {t.approaches.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -894,7 +898,7 @@ export default function EmailForm() {
                 name="naamOntvanger"
                 value={formData.naamOntvanger}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               />
             </div>
             <div>
@@ -904,21 +908,20 @@ export default function EmailForm() {
                 name="naamAfzender"
                 value={formData.naamAfzender}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               />
             </div>
           </section>
           <section>
             <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.number}</label>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-              <input
-                type="text"
-                name="nummer"
-                value={formData.nummer}
-                onChange={handleChange}
-                className="w-full sm:w-[160px] border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
-                placeholder={t.optioneel}
-              />
+<input
+  type="text"
+  name="number"
+  placeholder="Optional"
+  className="max-w-xs w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
+/>
+
               <div className="flex flex-wrap gap-2">
                 {t.numberTypes.map((nt) => (
                   <div
@@ -960,7 +963,7 @@ export default function EmailForm() {
               onChange={handleChange}
               rows={4}
               placeholder={t.replyPlaceholder}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
           </section>
         </>
@@ -976,7 +979,7 @@ export default function EmailForm() {
               name="bedrijfsnaamNieuwsbrief"
               value={formData.bedrijfsnaamNieuwsbrief}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               placeholder={t.companyPlaceholder}
             />
           </section>
@@ -986,7 +989,7 @@ export default function EmailForm() {
               name="bedrijfTypeNieuwsbrief"
               value={formData.bedrijfTypeNieuwsbrief}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             >
               {t.companyTypeOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1000,7 +1003,7 @@ export default function EmailForm() {
               name="websiteNieuwsbrief"
               value={formData.websiteNieuwsbrief}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               placeholder={t.websitePlaceholder}
             />
           </section>
@@ -1011,7 +1014,7 @@ export default function EmailForm() {
               name="onderwerpNieuwsbrief"
               value={formData.onderwerpNieuwsbrief || ""}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               placeholder={t.newsletterSubjectPlaceholder}
             />
           </section>
@@ -1022,7 +1025,7 @@ export default function EmailForm() {
                 name="doelgroepNieuwsbrief"
                 value={formData.doelgroepNieuwsbrief || ""}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               >
                 {t.audienceOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1035,7 +1038,7 @@ export default function EmailForm() {
                 name="stijlNieuwsbrief"
                 value={formData.stijlNieuwsbrief || ""}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
               >
                 {t.styleOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1051,7 +1054,7 @@ export default function EmailForm() {
               onChange={handleChange}
               rows={4}
               placeholder={t.pointsPlaceholder}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
           </section>
           <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
@@ -1061,7 +1064,8 @@ export default function EmailForm() {
                 name="lengteNieuwsbrief"
                 value={formData.lengteNieuwsbrief || ""}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+                className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
               >
                 {t.lengthOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1075,7 +1079,8 @@ export default function EmailForm() {
                 name="ctaNieuwsbrief"
                 value={formData.ctaNieuwsbrief || ""}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900"
+                className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+
                 placeholder={t.ctaPlaceholder}
               />
             </div>
@@ -1091,25 +1096,29 @@ export default function EmailForm() {
 <form
   onSubmit={handleSubmit}
   className="
-    max-w-full
-    sm:max-w-2xl
-    md:max-w-3xl
-    lg:max-w-4xl
+    w-full
+    max-w-2xl
+    sm:max-w-3xl
+    md:max-w-4xl
+    xl:max-w-5xl
     mx-auto my-6 sm:my-12
-    bg-white rounded-xl sm:rounded-2xl
-    shadow-xl sm:shadow-2xl
-    px-4 sm:px-8 py-5 sm:py-10
+    bg-white/80 rounded-2xl
+    shadow-2xl
+    px-4 sm:px-12 py-8 sm:py-14
     space-y-6 sm:space-y-10
+    backdrop-blur-xl
+    transition-all
   "
+
   style={{ fontFamily: "Inter, Arial, sans-serif" }}
 >
-   <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6 justify-center">
+<div className="flex flex-col md:flex-row justify-center gap-2 md:gap-4 mb-6">
   <button
     type="button"
     onClick={() => setTab("nieuw")}
-    className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
+    className={`flex-1 text-lg md:text-xl font-bold px-4 md:px-8 py-2 md:py-4 rounded-t-xl md:rounded-t-none md:rounded-l-xl border-b-4 md:border-b-0 md:border-r-4 ${
       tab === "nieuw"
-        ? "bg-blue-600 text-white border-blue-800 shadow-lg"
+        ? "bg-blue-600 text-white border-blue-800 shadow-lg z-10"
         : "bg-gray-100 text-gray-800 border-transparent hover:bg-blue-50"
     } transition-all duration-200`}
   >
@@ -1118,9 +1127,9 @@ export default function EmailForm() {
   <button
     type="button"
     onClick={() => setTab("antwoord")}
-    className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
+    className={`flex-1 text-lg md:text-xl font-bold px-4 md:px-8 py-2 md:py-4 border-b-4 md:border-b-0 md:border-r-4 ${
       tab === "antwoord"
-        ? "bg-green-600 text-white border-green-800 shadow-lg"
+        ? "bg-green-600 text-white border-green-800 shadow-lg z-10"
         : "bg-gray-100 text-gray-800 border-transparent hover:bg-green-50"
     } transition-all duration-200`}
   >
@@ -1129,9 +1138,9 @@ export default function EmailForm() {
   <button
     type="button"
     onClick={() => setTab("nieuwsbrief")}
-    className={`text-lg sm:text-xl font-bold px-4 sm:px-8 py-2 sm:py-4 rounded-t-xl border-b-4 ${
+    className={`flex-1 text-lg md:text-xl font-bold px-4 md:px-8 py-2 md:py-4 rounded-b-xl md:rounded-b-none md:rounded-r-xl border-b-4 md:border-b-0 ${
       tab === "nieuwsbrief"
-        ? "bg-purple-600 text-white border-purple-800 shadow-lg"
+        ? "bg-purple-600 text-white border-purple-800 shadow-lg z-10"
         : "bg-gray-100 text-gray-800 border-transparent hover:bg-purple-50"
     } transition-all duration-200`}
   >
@@ -1151,7 +1160,7 @@ export default function EmailForm() {
         benadering: translations[e.target.value as keyof typeof translations].approaches[0],
       }))
     }
-    className="w-48 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-base"
+    className="w-48 bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
   >
     <option value="Engels">English</option>
     <option value="Nederlands">Nederlands</option>
