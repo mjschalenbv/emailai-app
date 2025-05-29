@@ -1097,18 +1097,24 @@ className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text
   onSubmit={handleSubmit}
   className="
     w-full
-    max-w-2xl
-    sm:max-w-3xl
-    md:max-w-4xl
+    max-w-xl
+    sm:max-w-2xl
+    md:max-w-3xl
+    lg:max-w-4xl
     xl:max-w-5xl
-    mx-auto my-6 sm:my-12
-    bg-white/80 rounded-2xl
-    shadow-2xl
-    px-4 sm:px-12 py-8 sm:py-14
-    space-y-6 sm:space-y-10
-    backdrop-blur-xl
+    2xl:max-w-6xl
+    mx-auto
+    my-8 sm:my-16
+    bg-white/80
+    rounded-3xl
+    shadow-[0_8px_64px_0_rgba(70,50,200,0.13)]
+    border border-white/30
+    px-3 sm:px-8 md:px-12 lg:px-16 py-6 sm:py-12
+    space-y-7 sm:space-y-10
+    backdrop-blur-2xl
     transition-all
-  "
+    duration-300
+    "
 
   style={{ fontFamily: "Inter, Arial, sans-serif" }}
 >

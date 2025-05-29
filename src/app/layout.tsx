@@ -18,12 +18,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "EmailAI – Your AI Email Assistant",
   description:
-    "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
+    "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
   metadataBase: new URL("https://www.emailai.nl"),
   openGraph: {
     title: "EmailAI – Your AI Email Assistant",
     description:
-      "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
+      "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
     url: "https://www.emailai.nl",
     siteName: "EmailAI",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Example of a generated email with EmailAI",
+        alt: "EmailAI – Example of generated content",
       },
     ],
     locale: "en_US",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "EmailAI – Your AI Email Assistant",
     description:
-      "Generate professional emails and replies instantly with AI. EmailAI helps you save time and write better emails in any style or language.",
+      "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -67,31 +67,36 @@ export default function RootLayout({
           backgroundAttachment: "fixed",
         }}
       >
-        {/* HEADER - ONLY LOGO ICON + TEXT + CONTACT */}
-        <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/10 border-b border-indigo-100/10 shadow-lg transition-all duration-300">
-          <div className="max-w-7xl mx-auto flex items-center justify-between px-3 md:px-8 py-2 sm:py-3">
-            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+        {/* HEADER */}
+        <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-white/10 border-b border-indigo-100/10 shadow-xl transition-all duration-300">
+          <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 sm:py-3">
+            <Link
+              href="/"
+               className="flex items-center gap-2 sm:gap-3 group min-w-0 pl-4 md:pl-22"
+              style={{ minWidth: 0 }}
+            >
               <Image
                 src="/logo-icon.png"
                 alt="EmailAI Logo"
-                width={40}
-                height={40}
-                className="h-8 sm:h-10 w-auto rounded-xl shadow-md border border-white/40 group-hover:scale-105 transition-transform duration-200"
+                width={48}
+                height={48}
+                className="h-9 sm:h-12 w-auto rounded-2xl shadow-lg border border-white/40 group-hover:scale-105 transition-transform duration-200"
                 draggable={false}
                 priority
               />
-              <span className="text-lg sm:text-2xl font-black bg-gradient-to-r from-indigo-300 to-purple-400 bg-clip-text text-transparent tracking-tight group-hover:brightness-125 transition-colors select-none">
+              <span className="text-xl sm:text-3xl font-black bg-gradient-to-r from-indigo-300 to-purple-400 bg-clip-text text-transparent tracking-tight group-hover:brightness-125 transition-colors select-none">
                 EmailAI
               </span>
             </Link>
-            <nav className="flex items-center gap-3 md:gap-5">
-              <Link
-                href="/contact"
-                className="px-4 py-2 rounded-2xl bg-white/70 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
-              >
-                Contact & Support
-              </Link>
-            </nav>
+<nav className="flex items-center justify-end w-full">
+<Link
+  href="/contact"
+  className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
+>
+  Contact & Support
+</Link>
+</nav>
+
           </div>
         </header>
         <main className="flex-1 w-full flex flex-col items-center justify-center relative z-10">
@@ -105,7 +110,7 @@ export default function RootLayout({
           <span>© {new Date().getFullYear()} EmailAI</span>
         </footer>
         <Analytics />
-        {/* Animatie keyframes */}
+        {/* Animation keyframes */}
         <style>{`
           @keyframes fade-in {
             from { opacity: 0; transform: translateY(18px);}
