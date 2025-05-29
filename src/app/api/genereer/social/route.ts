@@ -134,12 +134,14 @@ Geef ALLEEN geldig JSON terug:
     let aiJson;
     try {
       aiJson = JSON.parse(cleanAntwoord);
-    } catch (e) {
+    } catch (e: unknown) {
       return NextResponse.json({
         error: "AI gaf geen geldige JSON (genereer social post)",
         debug_antwoord: antwoord,
+        message: e instanceof Error ? e.message : String(e),
       }, { status: 400 });
     }
+
 
     if (!aiJson.post) {
       return NextResponse.json({
@@ -149,11 +151,10 @@ Geef ALLEEN geldig JSON terug:
     }
 
     return NextResponse.json({ post: aiJson.post });
-  } catch (e: any) {
-    // Fallback voor alles wat onverwachts misgaat
+  } catch (e: unknown) {
     return NextResponse.json({
       error: "Server error in social post route.",
-      details: e.message || e.toString(),
+      details: e instanceof Error ? e.message : String(e),
     }, { status: 500 });
   }
 }

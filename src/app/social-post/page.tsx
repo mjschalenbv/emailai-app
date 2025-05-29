@@ -435,13 +435,18 @@ async function generatePost() {
       hashtagsText = "";
   }
 
-  // Logica voor custom fields
-  const goalText = ["Custom", "Zelf invullen", "Eigene Eingabe", "Personalizar", "Власний варіант", "Personnaliser"].includes(goal)
-    ? customGoal
-    : goal;
-  const ctaText = ["Custom", "Zelf invullen", "Eigene Aktion", "Personalizar", "Власний варіант", "Personnaliser"].includes(callToAction)
-    ? customCTA
-    : callToAction;
+// Logica voor custom fields
+const goalText = [
+  "Custom", "Zelf invullen", "Eigene Eingabe", "Personalizar", "Власний варіант", "Personnaliser"
+].includes(goal)
+  ? customGoal
+  : goal;
+
+const ctaText = [
+  "Custom", "Zelf invullen", "Eigene Aktion", "Personalizar", "Власний варіант", "Personnaliser"
+].includes(callToAction)
+  ? customCTA
+  : callToAction;
 
   // Hier doe je een POST naar je eigen backend!
   try {
