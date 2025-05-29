@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "EmailAI – Your AI Email Assistant",
     description:
       "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
-    images: ["/og-image.png"],
+    images: ["https://www.emailai.nl/og-image.png"], // <--- DIT IS DE FIX!
   },
   icons: {
     icon: [
@@ -52,6 +52,7 @@ export const metadata: Metadata = {
     apple: ["/favicon.png"],
   },
 };
+
 
 export default function RootLayout({
   children,
