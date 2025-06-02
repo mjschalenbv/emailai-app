@@ -32,19 +32,6 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // .be naar .ai
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "emailai.be" }],
-        destination: "https://emailai.ai/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.emailai.be" }],
-        destination: "https://emailai.ai/:path*",
-        permanent: true,
-      },
       // .es naar .ai
       {
         source: "/:path*",
@@ -58,7 +45,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // ENKEL www.emailai.ai → emailai.ai (let op, niet andersom)
+      // www.emailai.ai → emailai.ai (let op: alléén deze, niet andersom!)
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.emailai.ai" }],
