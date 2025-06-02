@@ -3,61 +3,6 @@
 import React, { useState } from "react";
 
 // Taal-vertalingen
-
-type TranslationType = {
-  email: string;
-  reply: string;
-  newsletter: string;
-  language: string;
-  approach: string;
-  recipient: string;
-  sender: string;
-  number: string;
-  numberLabel: string;
-  numberPlaceholder: string;
-  numberCustomPlaceholder: string;
-  numberTypes: { value: string; label: string }[];
-  subject: string;
-  emailContent: string;
-  placeholderContent: string;
-  replyPaste: string;
-  replyWhat: string;
-  replyPlaceholder: string;
-  companyName: string;
-  companyPlaceholder: string;
-  companyType: string;
-  companyTypeOptions: { value: string; label: string }[];
-  website: string;
-  websitePlaceholder: string;
-  newsletterSubject: string;
-  newsletterSubjectPlaceholder: string;
-  audience: string;
-  audienceOptions: { value: string; label: string }[];
-  style: string;
-  styleOptions: { value: string; label: string }[];
-  points: string;
-  pointsPlaceholder: string;
-  length: string;
-  lengthOptions: { value: string; label: string }[];
-  cta: string;
-  ctaPlaceholder: string;
-  generate: string;
-  generateReply: string;
-  generateNewsletter: string;
-  copy: string;
-  copied: string;
-  selectLanguage: string;
-  selectApproach: string;
-  approaches: string[];
-  optioneel: string;
-  emailText: string;
-  noSubject: string;
-  emailPurpose: string;
-  emailPurposeOptions: { value: string; label: string }[];
-  answerLength: string;
-  answerLengthOptions: { value: string; label: string }[];
-};
-
 const translations = {
   Nederlands: {
     email: "Genereer nieuwe e-mail",

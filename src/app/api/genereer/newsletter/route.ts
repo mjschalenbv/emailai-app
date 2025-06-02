@@ -103,7 +103,7 @@ Voorbeeld:
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
     });
-  } catch (e) {
+  } catch {
     return NextResponse.json({
       error: "AI gaf geen geldige JSON (genereer nieuwsbrief)",
       debug_antwoord: antwoord,

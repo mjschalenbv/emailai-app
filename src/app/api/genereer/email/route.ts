@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
   if (!data.taal) return NextResponse.json({ error: "Taal ontbreekt" }, { status: 400 });
 
-  const { taal, naamAfzender, naamOntvanger, benadering, nummer, nummerType, context, doelEmail } = data;
+const { taal, naamAfzender, naamOntvanger, nummer, nummerType, context, doelEmail } = data;
 
   const nummerContext =
     nummer && nummerType ? `Het ${nummerType} is: ${nummer}.` : "";
