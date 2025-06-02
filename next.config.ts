@@ -6,14 +6,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Redirect www.emailai.ai → emailai.ai (nooit andersom!)
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.emailai.ai" }],
-        destination: "https://emailai.ai/:path*",
-        permanent: true,
-      },
-      // Redirect .nl → .ai
+      // .nl naar .ai
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.nl" }],
@@ -26,7 +19,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // Redirect .fr → .ai
+      // .fr naar .ai
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.fr" }],
@@ -39,7 +32,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // Redirect .be → .ai
+      // .be naar .ai
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.be" }],
@@ -52,7 +45,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // Redirect .es → .ai
+      // .es naar .ai
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.es" }],
@@ -65,7 +58,13 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // (NOOIT emailai.ai naar zichzelf laten redirecten)
+      // ENKEL www.emailai.ai → emailai.ai (let op, niet andersom)
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.emailai.ai" }],
+        destination: "https://emailai.ai/:path*",
+        permanent: true,
+      },
     ];
   },
 };
