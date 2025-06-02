@@ -6,7 +6,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // .nl naar .ai
+      // NL
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.nl" }],
@@ -19,7 +19,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // .fr naar .ai
+      // FR
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.fr" }],
@@ -32,7 +32,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // .es naar .ai
+      // ES
       {
         source: "/:path*",
         has: [{ type: "host", value: "emailai.es" }],
@@ -45,7 +45,7 @@ const nextConfig = {
         destination: "https://emailai.ai/:path*",
         permanent: true,
       },
-      // www.emailai.ai → emailai.ai (let op: alléén deze, niet andersom!)
+      // Alleen www.emailai.ai → emailai.ai (en niet andersom!)
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.emailai.ai" }],
