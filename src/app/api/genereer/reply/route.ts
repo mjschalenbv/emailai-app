@@ -16,75 +16,93 @@ const languageInstructions: Record<string, string> = {
 export async function POST(req: Request) {
   const data = await req.json();
 
+  // Verplicht: taal, geplakte email (emailTekst) en antwoordwens (antwoordWens)
   if (!data.taal) return NextResponse.json({ error: "Taal ontbreekt" }, { status: 400 });
+  if (!data.emailTekst) return NextResponse.json({ error: "Plak eerst de e-mail waarop je wilt antwoorden.", veld: "emailTekst" }, { status: 400 });
+  if (!data.antwoordWens) return NextResponse.json({ error: "Vul in wat je wilt antwoorden op deze e-mail.", veld: "antwoordWens" }, { status: 400 });
 
   const {
-    taal, naamAfzender, naamOntvanger, benadering, nummer, nummerType,
-    antwoordLengte, antwoordWens, emailTekst
+    taal,
+    naamAfzender,
+    naamOntvanger,
+    nummer,
+    nummerType,
+    antwoordLengte,   // "kort", "gemiddeld", "uitgebreid"
+    benadering,        // "Zakelijk", "Vriendelijk", etc.
+    emailTekst,        // Geplakte e-mail waarop geantwoord wordt
+    antwoordWens       // Wat de gebruiker wil antwoorden
   } = data;
 
   const nummerContext =
-    nummer && nummerType ? `Het ${nummerType} is: ${nummer}.` : "";
+    nummer && nummerType
+      ? `Nummer informatie: ${nummerType === "anders" ? nummer : nummerType + ": " + nummer}.`
+      : "";
 
   const taalPrompt = languageInstructions[taal] || languageInstructions["Nederlands"];
 
   const systemPrompt = `
 ${taalPrompt}
-Je bent een professionele e-mailschrijver. Schrijf een zakelijk, kort en duidelijk antwoord op de onderstaande e-mail.
+Je bent een professionele AI e-mailassistent gespecialiseerd in het genereren van perfecte, zakelijke, en contextueel relevante antwoorden op bestaande e-mails. Neem zorgvuldig alle hieronder genoemde instructies en details mee in je gegenereerde antwoord.
 
-Ontvangen e-mail:
+Inputanalyse (verplicht):
+Analyseer grondig de geplakte e-mail waarop geantwoord moet worden. Gebruik deze e-mail als context om een logisch en passend antwoord te formuleren.
+
+Afzender en ontvanger:
+- Neem altijd duidelijk waarneembare afzender- en ontvanger-informatie uit de geplakte e-mail over.
+- Als er handmatig een naam voor ontvanger en/of afzender is ingevuld, gebruik dan deze gegevens expliciet en negeer eventuele andere namen uit de originele e-mail.
+
+${nummerContext ? nummerContext : ""}
+
+Lengte van het antwoord: ${antwoordLengte || "gemiddeld"}
+- Houd je strikt aan de gekozen lengte:
+  - Kort (1-2 zinnen): zeer kort en bondig antwoord.
+  - Gemiddeld (2-4 zinnen): helder en krachtig antwoord.
+  - Uitgebreid: gedetailleerd en volledig antwoord.
+
+Benadering/Tone-of-voice: ${benadering || "Zakelijk"}
+- Pas de stijl exact aan op basis van de geselecteerde toon:
+  - Zakelijk: professioneel en beleefd.
+  - Vriendelijk: persoonlijk en sympathiek.
+  - Informeel: casual en toegankelijk.
+  - Streng: direct, duidelijk en assertief.
+
+Inhoud van antwoord (verplicht):
+- Baseer je antwoord expliciet en nauwkeurig op wat de gebruiker beschrijft bij: "Wat wil je antwoorden op deze email?".
+- Zonder deze informatie mag geen antwoord gegenereerd worden.
+
+Taal en kwaliteitseisen:
+- Genereer altijd in een van de volgende talen, afhankelijk van wat geselecteerd is: Nederlands, Engels, Duits, Frans, Spaans of Oekraïens.
+- Zorg voor foutloze grammatica, spelling en interpunctie in het antwoord.
+
+Onderwerp genereren:
+- Creëer altijd een kort, krachtig en relevant onderwerp passend bij de inhoud van het gegenereerde antwoord.
+
+**Geplakte e-mail waarop geantwoord moet worden:**
 """
-${emailTekst || "GEEN E-MAIL GEPLAKT"}
+${emailTekst}
 """
 
-${antwoordWens ? `De gebruiker wil specifiek antwoorden: "${antwoordWens}"` : ""}
+**Antwoordwens van gebruiker (instructie):**
+"""
+${antwoordWens}
+"""
 
-${antwoordLengte ? `- De gewenste lengte van het antwoord is: "${antwoordLengte}".` : ""}
-
-- De naam van de ontvanger is: "${naamOntvanger || "[NIET INGEVULD]"}"
-- De naam van de afzender is: "${naamAfzender || "[NIET INGEVULD]"}"
-- Taal: ${taal}
-- Benadering: ${benadering}
-${nummerContext ? "- Nummer info: " + nummerContext : ""}
-
-**REGELS VOOR ONDERTEKENING EN AANHEF:**
-- Gebruik bij de aanhef de NAAM VAN DE ONTVANGER als deze is ingevuld (dus alleen bij de aanhef, NIET onderaan!).
-- Bij de afsluiting mag ALLEEN de NAAM VAN DE AFZENDER staan. Dus onder de mail staat nooit de naam van de ontvanger!
-- Kun je geen naam van de ontvanger vinden? Gebruik dan een nette algemene aanhef zoals "Geachte heer/mevrouw" of "Geachte [bedrijfsnaam]".
-- Bij bedrijven mag je "Geachte [bedrijfsnaam]" gebruiken als dat gepaster is.
-
-**OVERIG:**
-- Houd het antwoord zakelijk en concreet (${antwoordLengte ? antwoordLengte : "4-7 zinnen"}).
-- Vermijd beleefdheidsfrasen ("ik hoop dat...", etc).
-- Herhaal niets uit de oorspronkelijke e-mail.
-- Antwoord alleen inhoudelijk en menselijk, zonder omwegen.
-- Geen overbodige vragen terug.
-- Is er geen echte actie nodig? Geef een korte, nette bevestiging.
-- Geen uitleg, geen uitroeptekens tenzij functioneel.
-  - De **afzender van het antwoord** is de originele ontvanger van de geplakte e-mail.
-  - De **ontvanger van het antwoord** is de originele afzender van de geplakte e-mail.
-  - Gebruik altijd deze namen correct in de aanhef en ondertekening.
-  - De naam van de ontvanger mag NIET onder de e-mail staan.
-Antwoord ALLEEN als geldig JSON, bijvoorbeeld:
+Outputformaat (strikt vereist, geen andere tekst of uitleg geven):
 {
-  "onderwerp": "Kort en duidelijk",
-  "email": "..."
+  "onderwerp": "[Kort en relevant onderwerp]",
+  "email": "[Tekst van het perfect gegenereerde antwoord]"
 }
-Dus: GEEN uitleg of tekst buiten het JSON blok!
 `.trim();
 
   const messages: ChatCompletionMessageParam[] = [
     { role: "system", content: systemPrompt }
   ];
-  if (emailTekst) {
-    messages.push({ role: "user", content: emailTekst });
-  }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages,
-    temperature: 0.27,
-  });
+const completion = await openai.chat.completions.create({
+  model: "gpt-4o",
+  messages,
+  temperature: 0.27,
+});
 
   const antwoord = completion.choices[0]?.message?.content?.trim();
 
@@ -103,10 +121,10 @@ Dus: GEEN uitleg of tekst buiten het JSON blok!
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
     });
-} catch {
-  return NextResponse.json({
-    error: "AI gaf geen geldige JSON (genereer nieuwsbrief)",
-    debug_antwoord: antwoord,
-  }, { status: 400 });
-}
+  } catch {
+    return NextResponse.json({
+      error: "AI gaf geen geldige JSON (genereer antwoord)",
+      debug_antwoord: antwoord,
+    }, { status: 400 });
+  }
 }
