@@ -16,46 +16,62 @@ const languageInstructions: Record<string, string> = {
 export async function POST(req: Request) {
   const data = await req.json();
 
+  // Verplicht: taal & context/inhoud
   if (!data.taal) return NextResponse.json({ error: "Taal ontbreekt" }, { status: 400 });
+  if (!data.context) return NextResponse.json({ error: "Waar gaat de e-mail over ontbreekt" }, { status: 400 });
 
-const { taal, naamAfzender, naamOntvanger, nummer, nummerType, context, doelEmail } = data;
+  const {
+    taal,
+    naamAfzender,
+    naamOntvanger,
+    nummer,
+    nummerType,
+    context,           // Waar gaat de e-mail over
+    doelEmail,         // Doel van de e-mail (afspraak, klacht, etc)
+    benadering,        // Tone-of-voice
+    emailLengte        // Lengte van de e-mail
+  } = data;
 
+  // Nummer-context netjes verwerken
   const nummerContext =
-    nummer && nummerType ? `Het ${nummerType} is: ${nummer}.` : "";
+    nummer && nummerType
+      ? `Nummer informatie: ${nummerType === "anders" ? nummer : nummerType + ": " + nummer}.`
+      : "";
 
+  // Taalprompt instellen
   const taalPrompt = languageInstructions[taal] || languageInstructions["Nederlands"];
 
+  // Krachtige, volledige systemprompt
   const systemPrompt = `
 ${taalPrompt}
-Je bent een professionele e-mailschrijver.
 
-Schrijf een zakelijke, duidelijke e-mail (géén WhatsApp-stijl, niet te formeel of langdradig).
+Je bent een professionele AI-e-mailschrijver, gespecialiseerd in het genereren van foutloze, zakelijke en heldere e-mails. Neem alle onderstaande gegevens mee en genereer altijd een passende e-mail op basis van deze instructies:
 
-- Van: ${naamAfzender || "[NIET INGEVULD]"}
-- Aan: ${naamOntvanger || "[NIET INGEVULD]"}
-${nummerContext ? "- Nummer info: " + nummerContext : ""}
+Doel van de e-mail: ${doelEmail || "Niet gespecificeerd"}
+Benadering / Tone-of-voice: ${benadering || "Zakelijk"}
+${nummerContext ? nummerContext : ""}
+Lengte van de e-mail: ${emailLengte || "Normaal"}
 
-Onderwerp/instructie:
+Beschrijving van het onderwerp / inhoud:
 """
-${context || "Geen context opgegeven."}
+${context}
 """
 
-${doelEmail ? `Het doel van de e-mail is: "${doelEmail}".` : ""}
+Afzender: ${naamAfzender || "[Niet ingevuld]"}
+Ontvanger: ${naamOntvanger || "[Niet ingevuld]"}
 
-**REGELS VOOR ONDERTEKENING EN AANHEF:**
-- Gebruik bij de aanhef de NAAM VAN DE ONTVANGER als deze is ingevuld (dus alleen bij de aanhef, NIET onderaan!).
-- Bij de afsluiting mag ALLEEN de NAAM VAN DE AFZENDER staan. Dus onder de mail staat nooit de naam van de ontvanger!
-- Kun je geen naam van de ontvanger vinden? Gebruik dan een nette algemene aanhef zoals "Geachte heer/mevrouw" of "Geachte [bedrijfsnaam]".
-- Bij bedrijven mag je "Geachte [bedrijfsnaam]" gebruiken als dat gepaster is.
-
-- Maak het onderwerp kort, duidelijk en relevant (maximaal 6 woorden).
-- Schrijf zakelijk, vriendelijk en zonder poespas.
-- Geef ALLEEN geldig JSON terug, zonder enige extra uitleg of tekst.
+Instructies:
+- Houd je exact aan de opgegeven lengte (Kort: 1-2 zinnen, Normaal: 3-5 zinnen, Lang: 5-7 zinnen, Uitgebreid: 8+ zinnen).
+- Pas de toon exact aan op basis van het gekozen doel en benadering.
+- Vermeld nummerinformatie expliciet als deze is ingevuld.
+- Gebruik perfecte grammatica, spelling en interpunctie.
+- Maak het onderwerp van de mail kort, krachtig en altijd relevant (max 6 woorden).
+- Geef ALLEEN geldig JSON terug zonder enige verdere uitleg of tekst.
 
 Voorbeeld:
 {
-  "onderwerp": "Kort en duidelijk",
-  "email": "..."
+  "onderwerp": "Onderwerp van de email",
+  "email": "Tekst van de email"
 }
 `.trim();
 
@@ -86,10 +102,10 @@ Voorbeeld:
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
     });
-  } catch {  // <-- GEEN 'e' meer!
+  } catch {
     return NextResponse.json({
       error: "AI gaf geen geldige JSON (genereer email)",
       debug_antwoord: antwoord,
     }, { status: 400 });
   }
-  } 
+}
