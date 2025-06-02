@@ -103,10 +103,10 @@ Dus: GEEN uitleg of tekst buiten het JSON blok!
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
     });
-  } catch (e) {
-    return NextResponse.json({
-      error: "AI gaf geen geldige JSON (genereer reply)",
-      debug_antwoord: antwoord,
-    }, { status: 400 });
-  }
+} catch {
+  return NextResponse.json({
+    error: "AI gaf geen geldige JSON (genereer nieuwsbrief)",
+    debug_antwoord: antwoord,
+  }, { status: 400 });
+}
 }

@@ -86,10 +86,10 @@ Voorbeeld:
       onderwerp: aiJson.onderwerp || "",
       email: aiJson.email || "",
     });
-  } catch (e) {
+  } catch {  // <-- GEEN 'e' meer!
     return NextResponse.json({
       error: "AI gaf geen geldige JSON (genereer email)",
       debug_antwoord: antwoord,
     }, { status: 400 });
   }
-}
+  } 
