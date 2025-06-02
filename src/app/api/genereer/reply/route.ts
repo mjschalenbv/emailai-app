@@ -21,17 +21,16 @@ export async function POST(req: Request) {
   if (!data.emailTekst) return NextResponse.json({ error: "Plak eerst de e-mail waarop je wilt antwoorden.", veld: "emailTekst" }, { status: 400 });
   if (!data.antwoordWens) return NextResponse.json({ error: "Vul in wat je wilt antwoorden op deze e-mail.", veld: "antwoordWens" }, { status: 400 });
 
-  const {
-    taal,
-    naamAfzender,
-    naamOntvanger,
-    nummer,
-    nummerType,
-    antwoordLengte,   // "kort", "gemiddeld", "uitgebreid"
-    benadering,        // "Zakelijk", "Vriendelijk", etc.
-    emailTekst,        // Geplakte e-mail waarop geantwoord wordt
-    antwoordWens       // Wat de gebruiker wil antwoorden
-  } = data;
+const {
+  taal,
+  nummer,
+  nummerType,
+  antwoordLengte,
+  benadering,
+  emailTekst,
+  antwoordWens
+} = data;
+
 
   const nummerContext =
     nummer && nummerType
