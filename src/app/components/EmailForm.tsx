@@ -768,14 +768,6 @@ export default function EmailForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleNummerTypeChange = (value: NummerType) => {
-  setFormData((prev) => ({
-    ...prev,
-    nummerType: value,
-  }));
-};
-
-
   const handleCopy = async (text: string, type: "subject" | "body") => {
     await navigator.clipboard.writeText(text);
     setCopyFeedback({ type });
