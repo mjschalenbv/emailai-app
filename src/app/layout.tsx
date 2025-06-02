@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "EmailAI",
     images: [
       {
-        url: "https://www.emailai.nl/og-image.png", // <-- Absolute URL!
+        url: "https://www.emailai.nl/og-image.png",
         width: 1200,
         height: 630,
         alt: "EmailAI – Example of generated content",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "EmailAI – Your AI Email Assistant",
     description:
       "Generate professional emails, replies, newsletters, and social posts instantly with AI. EmailAI helps you save time and write better content in any style or language.",
-    images: ["https://www.emailai.nl/og-image.png"], // <-- Absolute URL!
+    images: ["https://www.emailai.nl/og-image.png"],
   },
   icons: {
     icon: [
@@ -69,10 +69,10 @@ export default function RootLayout({
       >
         {/* HEADER */}
         <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-white/10 border-b border-indigo-100/10 shadow-xl transition-all duration-300">
-          <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 sm:py-3">
+          <div className="max-w-5xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 sm:py-3">
             <Link
               href="/"
-              className="flex items-center gap-2 sm:gap-3 group min-w-0 pl-4 md:pl-22"
+              className="flex items-center gap-2 sm:gap-3 group min-w-0"
               style={{ minWidth: 0 }}
             >
               <Image
@@ -88,25 +88,53 @@ export default function RootLayout({
                 EmailAI
               </span>
             </Link>
-            <nav className="flex items-center justify-end w-full">
-              <Link
-                href="/contact"
-                className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
-              >
-                Contact & Support
-              </Link>
-            </nav>
+            <Link
+              href="/contact"
+              className="ml-auto px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
+            >
+              Contact & Support
+            </Link>
           </div>
         </header>
+        {/* MAIN CONTENT */}
         <main className="flex-1 w-full flex flex-col items-center justify-center relative z-10">
-          {children}
+          <div
+            className="
+              w-full
+              max-w-4xl
+              lg:max-w-5xl
+              2xl:max-w-6xl
+              mx-auto
+              my-8 sm:my-16
+              bg-gradient-to-br from-[#fafbff] via-[#f1f2fb] to-[#ede6fa] dark:from-[#232347] dark:via-[#21213b] dark:to-[#232347]
+              rounded-3xl
+              shadow-2xl
+              border border-white/30
+              px-4 sm:px-10 md:px-16 lg:px-24
+              py-6 sm:py-12 lg:py-14
+              space-y-7 sm:space-y-10
+              backdrop-blur-2xl
+              transition-all
+              duration-300
+            "
+            style={{
+              fontFamily: "Inter, Arial, sans-serif",
+              boxShadow:
+                "0 4px 64px 0 rgba(70,50,200,0.09), 0 1.5px 6px 0 rgba(70,50,200,0.03)",
+            }}
+          >
+            {children}
+          </div>
         </main>
-        <footer className="w-full mt-auto bg-transparent flex justify-center py-8 text-gray-400 text-xs font-medium tracking-tight">
-          <Link href="/privacy" className="hover:text-purple-400 underline underline-offset-4 transition-colors">
-            Privacy Policy
-          </Link>
-          <span className="mx-2">•</span>
-          <span>© {new Date().getFullYear()} EmailAI</span>
+        {/* FOOTER */}
+        <footer className="w-full bg-transparent flex justify-center py-8 text-gray-400 text-xs font-medium tracking-tight">
+          <div className="max-w-5xl w-full flex justify-center items-center">
+            <Link href="/privacy" className="hover:text-purple-400 underline underline-offset-4 transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="mx-2">•</span>
+            <span>© {new Date().getFullYear()} EmailAI</span>
+          </div>
         </footer>
         <Analytics />
         {/* Animation keyframes */}

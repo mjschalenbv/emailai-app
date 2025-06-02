@@ -3,6 +3,61 @@
 import React, { useState } from "react";
 
 // Taal-vertalingen
+
+type TranslationType = {
+  email: string;
+  reply: string;
+  newsletter: string;
+  language: string;
+  approach: string;
+  recipient: string;
+  sender: string;
+  number: string;
+  numberLabel: string;
+  numberPlaceholder: string;
+  numberCustomPlaceholder: string;
+  numberTypes: { value: string; label: string }[];
+  subject: string;
+  emailContent: string;
+  placeholderContent: string;
+  replyPaste: string;
+  replyWhat: string;
+  replyPlaceholder: string;
+  companyName: string;
+  companyPlaceholder: string;
+  companyType: string;
+  companyTypeOptions: { value: string; label: string }[];
+  website: string;
+  websitePlaceholder: string;
+  newsletterSubject: string;
+  newsletterSubjectPlaceholder: string;
+  audience: string;
+  audienceOptions: { value: string; label: string }[];
+  style: string;
+  styleOptions: { value: string; label: string }[];
+  points: string;
+  pointsPlaceholder: string;
+  length: string;
+  lengthOptions: { value: string; label: string }[];
+  cta: string;
+  ctaPlaceholder: string;
+  generate: string;
+  generateReply: string;
+  generateNewsletter: string;
+  copy: string;
+  copied: string;
+  selectLanguage: string;
+  selectApproach: string;
+  approaches: string[];
+  optioneel: string;
+  emailText: string;
+  noSubject: string;
+  emailPurpose: string;
+  emailPurposeOptions: { value: string; label: string }[];
+  answerLength: string;
+  answerLengthOptions: { value: string; label: string }[];
+};
+
 const translations = {
   Nederlands: {
     email: "Genereer nieuwe e-mail",
@@ -12,12 +67,19 @@ const translations = {
     approach: "Benadering",
     recipient: "Naam ontvanger",
     sender: "Naam afzender",
+
     number: "Nummer",
+    numberLabel: "Nummer",                // Label boven het veld
+    numberPlaceholder: "Kies nummer...",  // Eerste optie in dropdown
+    numberCustomPlaceholder: "Voer zelf een nummer of referentie in", // Placeholder als "Anders..." gekozen
     numberTypes: [
       { value: "bestelnummer", label: "Bestelnummer" },
       { value: "factuurnummer", label: "Factuurnummer" },
       { value: "klantnummer", label: "Klantnummer" },
+      { value: "anders", label: "Anders..." },
     ],
+
+
     subject: "Onderwerp",
     emailContent: "Waar gaat de e-mail over?",
     placeholderContent: "Beschrijf hier duidelijk het onderwerp of de inhoud van je e-mail.",
@@ -100,23 +162,37 @@ answerLengthOptions: [
   { value: "gemiddeld", label: "Gemiddeld (2-4 zinnen)" },
   { value: "lang", label: "Uitgebreid" }
 ],
+emailLength: "Lengte van de e-mail",
+emailLengthOptions: [
+  { value: "", label: "Kies lengte..." },             // Nederlands
+  { value: "kort", label: "Kort" },
+  { value: "normaal", label: "Normaal" },
+  { value: "lang", label: "Lang" },
+  { value: "uitgebreid", label: "Uitgebreid" }
+],
 
 
   },
-  Engels: {
-    email: "Generate new email",
-    reply: "Generate email reply",
-    newsletter: "Generate newsletter",
-    language: "Language",
-    approach: "Approach",
-    recipient: "Recipient name",
-    sender: "Sender name",
-    number: "Number",
-    numberTypes: [
-      { value: "bestelnummer", label: "Order number" },
-      { value: "factuurnummer", label: "Invoice number" },
-      { value: "klantnummer", label: "Customer number" },
-    ],
+Engels: {
+  email: "Generate new email",
+  reply: "Generate email reply",
+  newsletter: "Generate newsletter",
+  language: "Language",
+  approach: "Approach",
+  recipient: "Recipient name",
+  sender: "Sender name",
+
+  number: "Number",
+  numberLabel: "Number",
+  numberPlaceholder: "Choose number...",
+  numberCustomPlaceholder: "Enter your own reference or number",
+  numberTypes: [
+    { value: "bestelnummer", label: "Order number" },
+    { value: "factuurnummer", label: "Invoice number" },
+    { value: "klantnummer", label: "Customer number" },
+    { value: "anders", label: "Other..." },
+  ],
+
     subject: "Subject",
     emailContent: "What is the email about?",
     placeholderContent: "Clearly describe the topic or content of your email.",
@@ -200,6 +276,15 @@ answerLengthOptions: [
   { value: "lang", label: "Long (detailed)" }
 ],
 
+emailLength: "Email length",
+emailLengthOptions: [
+  { value: "", label: "Choose length..." },
+  { value: "kort", label: "Short" },
+  { value: "normaal", label: "Normal" },
+  { value: "lang", label: "Long" },
+  { value: "uitgebreid", label: "Extended" }
+],
+
 
   },
   Duits: {
@@ -210,12 +295,18 @@ answerLengthOptions: [
     approach: "Ansprache",
     recipient: "Empfängername",
     sender: "Absendername",
+
     number: "Nummer",
+    numberLabel: "Nummer",
+    numberPlaceholder: "Nummer wählen...",
+    numberCustomPlaceholder: "Eigene Nummer oder Referenz eingeben",
     numberTypes: [
       { value: "bestelnummer", label: "Bestellnummer" },
       { value: "factuurnummer", label: "Rechnungsnummer" },
       { value: "klantnummer", label: "Kundennummer" },
+      { value: "anders", label: "Andere..." }
     ],
+
     subject: "Betreff",
     emailContent: "Worum geht es in der E-Mail?",
     placeholderContent: "Beschreiben Sie das Thema oder den Inhalt Ihrer E-Mail.",
@@ -299,6 +390,16 @@ answerLengthOptions: [
   { value: "lang", label: "Lang (ausführlich)" }
 ],
 
+emailLength: "Länge der E-Mail",
+emailLengthOptions: [
+  { value: "", label: "Länge wählen..." },
+  { value: "kort", label: "Kurz" },
+  { value: "normaal", label: "Normal" },
+  { value: "lang", label: "Lang" },
+  { value: "uitgebreid", label: "Ausführlich" }
+],
+
+
 
   },
   Frans: {
@@ -309,12 +410,18 @@ answerLengthOptions: [
     approach: "Approche",
     recipient: "Nom du destinataire",
     sender: "Nom de l'expéditeur",
+
     number: "Numéro",
+    numberLabel: "Numéro",
+    numberPlaceholder: "Choisissez le numéro...",
+    numberCustomPlaceholder: "Entrez votre propre numéro ou référence",
     numberTypes: [
       { value: "bestelnummer", label: "Numéro de commande" },
       { value: "factuurnummer", label: "Numéro de facture" },
       { value: "klantnummer", label: "Numéro client" },
+      { value: "anders", label: "Autre..." },
     ],
+
     subject: "Sujet",
     emailContent: "De quoi s'agit-il dans l'e-mail ?",
     placeholderContent: "Décrivez clairement le sujet ou le contenu de votre e-mail.",
@@ -397,6 +504,15 @@ answerLengthOptions: [
   { value: "gemiddeld", label: "Moyen (2-4 phrases)" },
   { value: "lang", label: "Long (détaillé)" }
 ],
+emailLength: "Longueur de l'e-mail",
+emailLengthOptions: [
+  { value: "", label: "Choisir la longueur..." },
+  { value: "kort", label: "Court" },
+  { value: "normaal", label: "Normal" },
+  { value: "lang", label: "Long" },
+  { value: "uitgebreid", label: "Détaillé" }
+],
+
 
 
   },
@@ -408,12 +524,18 @@ answerLengthOptions: [
     approach: "Enfoque",
     recipient: "Nombre del destinatario",
     sender: "Nombre del remitente",
+
     number: "Número",
+    numberLabel: "Número",
+    numberPlaceholder: "Elija número...",
+    numberCustomPlaceholder: "Introduzca su propio número o referencia",
     numberTypes: [
       { value: "bestelnummer", label: "Número de pedido" },
       { value: "factuurnummer", label: "Número de factura" },
       { value: "klantnummer", label: "Número de cliente" },
+      { value: "anders", label: "Otro..." }
     ],
+
     subject: "Asunto",
     emailContent: "¿Sobre qué trata el correo?",
     placeholderContent: "Describe claramente el tema o contenido de tu correo.",
@@ -496,44 +618,59 @@ answerLengthOptions: [
   { value: "gemiddeld", label: "Medio (2-4 frases)" },
   { value: "lang", label: "Largo (detallado)" }
 ],
+emailLength: "Longitud del correo",
+emailLengthOptions: [
+  { value: "", label: "Elige longitud..." },
+  { value: "kort", label: "Corto" },
+  { value: "normaal", label: "Normal" },
+  { value: "lang", label: "Largo" },
+  { value: "uitgebreid", label: "Extendido" }
+],
+
 
 
   },
-  Oekraïens: {
-    email: "Створити новий лист",
-    reply: "Згенерувати відповідь на лист",
-    newsletter: "Створити розсилку",
-    language: "Мова",
-    approach: "Стиль",
-    recipient: "Ім'я одержувача",
-    sender: "Ім'я відправника",
-    number: "Номер",
-    numberTypes: [
-      { value: "bestelnummer", label: "Номер замовлення" },
-      { value: "factuurnummer", label: "Номер рахунку" },
-      { value: "klantnummer", label: "Номер клієнта" },
-    ],
-    subject: "Тема",
-    emailContent: "Про що цей лист?",
-    placeholderContent: "Чітко опишіть тему або зміст листа.",
-    replyPaste: "Вставте лист, на який хочете відповісти",
-    replyWhat: "Що ви хочете відповісти на цей лист?",
-    replyPlaceholder: "Наприклад: Запитати про статус, подякувати, поставити нове запитання тощо.",
-    companyName: "Назва компанії або відправника",
-    companyPlaceholder: "наприклад: Іван Іванов / TechBouw ТОВ",
-    companyType: "Який у вас тип компанії?",
-    companyTypeOptions: [
-      { value: "", label: "Оберіть тип компанії..." },
-      { value: "Detailhandel", label: "Роздрібна торгівля / магазин" },
-      { value: "Bouw", label: "Будівництво / техніка" },
-      { value: "Zorg", label: "Охорона здоров'я / соціальна сфера" },
-      { value: "Financieel", label: "Фінанси / адміністрування" },
-      { value: "ICT", label: "ІТ / програмне забезпечення" },
-      { value: "Horeca", label: "Готельно-ресторанний бізнес" },
-      { value: "Zakelijke dienstverlening", label: "Бізнес-послуги" },
-      { value: "Onderwijs", label: "Освіта" },
-      { value: "Anders", label: "Інше..." },
-    ],
+Oekraïens: {
+  email: "Створити новий лист",
+  reply: "Згенерувати відповідь на лист",
+  newsletter: "Створити розсилку",
+  language: "Мова",
+  approach: "Стиль",
+  recipient: "Ім'я одержувача",
+  sender: "Ім'я відправника",
+
+  number: "Номер",
+  numberLabel: "Номер", // <-- toegevoegd
+  numberPlaceholder: "Виберіть номер...", // <-- toegevoegd
+  numberCustomPlaceholder: "Введіть власний номер або посилання", // <-- toegevoegd
+
+  numberTypes: [
+    { value: "bestelnummer", label: "Номер замовлення" },
+    { value: "factuurnummer", label: "Номер рахунку" },
+    { value: "klantnummer", label: "Номер клієнта" },
+    { value: "anders", label: "Інше..." }
+  ],
+  subject: "Тема",
+  emailContent: "Про що цей лист?",
+  placeholderContent: "Чітко опишіть тему або зміст листа.",
+  replyPaste: "Вставте лист, на який хочете відповісти",
+  replyWhat: "Що ви хочете відповісти на цей лист?",
+  replyPlaceholder: "Наприклад: Запитати про статус, подякувати, поставити нове запитання тощо.",
+  companyName: "Назва компанії або відправника",
+  companyPlaceholder: "наприклад: Іван Іванов / TechBouw ТОВ",
+  companyType: "Який у вас тип компанії?",
+  companyTypeOptions: [
+    { value: "", label: "Оберіть тип компанії..." },
+    { value: "Detailhandel", label: "Роздрібна торгівля / магазин" },
+    { value: "Bouw", label: "Будівництво / техніка" },
+    { value: "Zorg", label: "Охорона здоров'я / соціальна сфера" },
+    { value: "Financieel", label: "Фінанси / адміністрування" },
+    { value: "ICT", label: "ІТ / програмне забезпечення" },
+    { value: "Horeca", label: "Готельно-ресторанний бізнес" },
+    { value: "Zakelijke dienstverlening", label: "Бізнес-послуги" },
+    { value: "Onderwijs", label: "Освіта" },
+    { value: "Anders", label: "Інше..." },
+  ],
     website: "Веб-сайт компанії (необов'язково)",
     websitePlaceholder: "https://www.yourcompany.ua",
     newsletterSubject: "Тема розсилки",
@@ -595,13 +732,22 @@ answerLengthOptions: [
   { value: "gemiddeld", label: "Середня (2-4 речення)" },
   { value: "lang", label: "Довга (детально)" }
 ],
+emailLength: "Довжина листа",
+emailLengthOptions: [
+  { value: "", label: "Оберіть довжину..." },
+  { value: "kort", label: "Короткий" },
+  { value: "normaal", label: "Звичайний" },
+  { value: "lang", label: "Довгий" },
+  { value: "uitgebreid", label: "Розгорнутий" }
+],
+
 
 
   },
 } as const;
 
 // --- Types ---
-type NummerType = "bestelnummer" | "factuurnummer" | "klantnummer" | "";
+type NummerType = "" | "bestelnummer" | "factuurnummer" | "klantnummer" | "anders";
 type BedrijfType =
   | ""
   | "Detailhandel"
@@ -635,19 +781,19 @@ type EmailFormData = {
   ctaNieuwsbrief: string;
   doelEmail: string;
   antwoordLengte: string;
+  emailLength: string;
 };
 
 export default function EmailForm() {
   const [tab, setTab] = useState<"nieuw" | "antwoord" | "nieuwsbrief">("nieuw");
   const [formData, setFormData] = useState<EmailFormData>({
-
     emailTekst: "",
     taal: "Engels",
     naamAfzender: "",
     naamOntvanger: "",
     benadering: translations["Nederlands"].approaches[0],
     nummer: "",
-    nummerType: "",
+    nummerType: "",   // <-- DIT moet je hier zo zetten, dus een lege string!
     context: "",
     antwoordWens: "",
     bedrijfsnaamNieuwsbrief: "",
@@ -661,6 +807,7 @@ export default function EmailForm() {
     ctaNieuwsbrief: "",
     doelEmail: "",
     antwoordLengte: "",
+    emailLength: "",
   });
   const t = translations[formData.taal];
 
@@ -676,12 +823,13 @@ export default function EmailForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleNummerTypeChange = (value: NummerType) => {
-    setFormData((prev) => ({
-      ...prev,
-      nummerType: prev.nummerType === value ? "" : value,
-    }));
-  };
+const handleNummerTypeChange = (value: NummerType) => {
+  setFormData((prev) => ({
+    ...prev,
+    nummerType: value,
+  }));
+};
+
 
   const handleCopy = async (text: string, type: "subject" | "body") => {
     await navigator.clipboard.writeText(text);
@@ -693,403 +841,412 @@ export default function EmailForm() {
     e.preventDefault();
   };
 
-  const handleGenereer = async () => {
-    setGegenereerdeEmail("");
-    setGegenereerdOnderwerp("");
+const handleGenereer = async () => {
+  setGegenereerdeEmail("");
+  setGegenereerdOnderwerp("");
 
-    const isAntwoord = tab === "antwoord";
-    const isNieuwsbrief = tab === "nieuwsbrief";
-    const payload = isAntwoord
-      ? {
-          ...formData,
-          isAntwoord: true,
-          naamAfzender: formData.naamOntvanger,
-          naamOntvanger: formData.naamAfzender,
-        }
-      : {
-          ...formData,
-          isAntwoord: false,
-          isNieuwsbrief,
-        };
+  const isAntwoord = tab === "antwoord";
+  const isNieuwsbrief = tab === "nieuwsbrief";
+  const payload = isAntwoord
+    ? {
+        ...formData,
+        isAntwoord: true,
+        naamAfzender: formData.naamOntvanger,
+        naamOntvanger: formData.naamAfzender,
+      }
+    : {
+        ...formData,
+        isAntwoord: false,
+        isNieuwsbrief,
+      };
 
-    try {
-      const response = await fetch("/api/genereer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+  // **HIER NIEUW:**
+  let endpoint = "/api/genereer/email";
+  if (tab === "antwoord") endpoint = "/api/genereer/reply";
+  if (tab === "nieuwsbrief") endpoint = "/api/genereer/newsletter";
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Error generating email.");
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-      setGegenereerdeEmail(data.email || "");
-      setGegenereerdOnderwerp(data.onderwerp || "");
-    } catch {
-      alert("AI error.");
-    }
-  };
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Error generating email.");
+
+    setGegenereerdeEmail(data.email || "");
+    setGegenereerdOnderwerp(data.onderwerp || "");
+  } catch {
+    alert("AI error.");
+  }
+};
+
 
   // --- UI Fields (dynamisch op basis van tab en taal) ---
-  const renderFields = () => {
-    if (tab === "nieuw") {
-      return (
-        <>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-       <div>
-  <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.emailPurpose}</label>
-  <select
-    name="doelEmail"
-    value={formData.doelEmail || ""}
-    onChange={handleChange}
-   className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-
-  >
-    {t.emailPurposeOptions.map((opt) => (
-      <option key={opt.value} value={opt.value}>{opt.label}</option>
-    ))}
-  </select>
-</div>
-
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.approach}</label>
-              <select
-                name="benadering"
-                value={formData.benadering}
-                onChange={handleChange}
-              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-
-              >
-                {t.approaches.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-          </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.recipient}</label>
-              <input
-                type="text"
-                name="naamOntvanger"
-                value={formData.naamOntvanger}
-                onChange={handleChange}
-              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-
-              />
-            </div>
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.sender}</label>
-              <input
-                type="text"
-                name="naamAfzender"
-                value={formData.naamAfzender}
-                onChange={handleChange}
-             className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-
-              />
-            </div>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.number}</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-       <input
-  type="text"
-  name="number"
-  placeholder="Optional"
-  className="max-w-xs w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
-/>
-
-              <div className="flex flex-wrap gap-2">
-                {t.numberTypes.map((nt) => (
-                  <div
-                    key={nt.value}
-                    className="flex items-center cursor-pointer select-none"
-                    onClick={() => handleNummerTypeChange(nt.value as NummerType)}
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === " " || e.key === "Enter") handleNummerTypeChange(nt.value as NummerType);
-                    }}
-                    role="checkbox"
-                    aria-checked={formData.nummerType === nt.value}
-                    aria-label={nt.label}
-                  >
-                    <span
-                      className={`
-                        w-6 h-6 mr-1 flex items-center justify-center border-2 rounded
-                        ${formData.nummerType === nt.value ? "border-blue-600 bg-blue-600" : "border-gray-400 bg-white"}
-                        transition-colors duration-200
-                      `}
-                    >
-                      {formData.nummerType === nt.value && (
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24">
-                          <polyline points="20 6 10 18 4 12" />
-                        </svg>
-                      )}
-                    </span>
-                    <span className="text-gray-900 text-xs md:text-sm font-medium">{nt.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.emailContent}</label>
-            <textarea
-              name="context"
-              value={formData.context}
-              onChange={handleChange}
-              rows={3}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              placeholder={t.placeholderContent}
-            />
-          </section>
-        </>
-      );
-    }
-    if (tab === "antwoord") {
-      return (
-        <>
-          <section>
-            <label className="block mb-1 md:mb-2 text-base font-semibold text-gray-700">{t.replyPaste}</label>
-            <textarea
-              name="emailTekst"
-              value={formData.emailTekst}
-              onChange={handleChange}
-              rows={8}
-              className="w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
-              required
-            />
-          </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-<div>
-  <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.answerLength}</label>
-  <select
-    name="antwoordLengte"
-    value={formData.antwoordLengte || ""}
-    onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-  >
-    {t.answerLengthOptions.map((opt) => (
-      <option key={opt.value} value={opt.value}>{opt.label}</option>
-    ))}
-  </select>
-</div>
-
-
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.approach}</label>
-              <select
-                name="benadering"
-                value={formData.benadering}
-                onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              >
-                {t.approaches.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-          </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.recipient}</label>
-              <input
-                type="text"
-                name="naamOntvanger"
-                value={formData.naamOntvanger}
-                onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.sender}</label>
-              <input
-                type="text"
-                name="naamAfzender"
-                value={formData.naamAfzender}
-                onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              />
-            </div>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.number}</label>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-<input
-  type="text"
-  name="number"
-  placeholder="Optional"
-  className="max-w-xs w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
-/>
-
-              <div className="flex flex-wrap gap-2">
-                {t.numberTypes.map((nt) => (
-                  <div
-                    key={nt.value}
-                    className="flex items-center cursor-pointer select-none"
-                    onClick={() => handleNummerTypeChange(nt.value as NummerType)}
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === " " || e.key === "Enter") handleNummerTypeChange(nt.value as NummerType);
-                    }}
-                    role="checkbox"
-                    aria-checked={formData.nummerType === nt.value}
-                    aria-label={nt.label}
-                  >
-                    <span
-                      className={`
-                        w-6 h-6 mr-1 flex items-center justify-center border-2 rounded
-                        ${formData.nummerType === nt.value ? "border-blue-600 bg-blue-600" : "border-gray-400 bg-white"}
-                        transition-colors duration-200
-                      `}
-                    >
-                      {formData.nummerType === nt.value && (
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24">
-                          <polyline points="20 6 10 18 4 12" />
-                        </svg>
-                      )}
-                    </span>
-                    <span className="text-gray-900 text-xs md:text-sm font-medium">{nt.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.replyWhat}</label>
-            <textarea
-              name="antwoordWens"
-              value={formData.antwoordWens}
-              onChange={handleChange}
-              rows={4}
-              placeholder={t.replyPlaceholder}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </section>
-        </>
-      );
-    }
-    if (tab === "nieuwsbrief") {
-      return (
-        <>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.companyName}</label>
-            <input
-              type="text"
-              name="bedrijfsnaamNieuwsbrief"
-              value={formData.bedrijfsnaamNieuwsbrief}
-              onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              placeholder={t.companyPlaceholder}
-            />
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.companyType}</label>
+const renderFields = () => {
+  if (tab === "nieuw") {
+    return (
+      <>
+        {/* Eerste regel: doel en benadering */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.emailPurpose}</label>
             <select
-              name="bedrijfTypeNieuwsbrief"
-              value={formData.bedrijfTypeNieuwsbrief}
+              name="doelEmail"
+              value={formData.doelEmail || ""}
               onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             >
-              {t.companyTypeOptions.map((opt) => (
+              {t.emailPurposeOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.website}</label>
+          </div>
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.approach}</label>
+            <select
+              name="benadering"
+              value={formData.benadering}
+              onChange={handleChange}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              {t.approaches.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+        </section>
+
+        {/* Tweede regel: ontvanger/afzender */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.recipient}</label>
             <input
               type="text"
-              name="websiteNieuwsbrief"
-              value={formData.websiteNieuwsbrief}
+              name="naamOntvanger"
+              value={formData.naamOntvanger}
               onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              placeholder={t.websitePlaceholder}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.newsletterSubject}</label>
+          </div>
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.sender}</label>
             <input
               type="text"
-              name="onderwerpNieuwsbrief"
-              value={formData.onderwerpNieuwsbrief || ""}
+              name="naamAfzender"
+              value={formData.naamAfzender}
               onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              placeholder={t.newsletterSubjectPlaceholder}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
-          </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.audience}</label>
-              <select
-                name="doelgroepNieuwsbrief"
-                value={formData.doelgroepNieuwsbrief || ""}
-                onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              >
-                {t.audienceOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.style}</label>
-              <select
-                name="stijlNieuwsbrief"
-                value={formData.stijlNieuwsbrief || ""}
-                onChange={handleChange}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-              >
-                {t.styleOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-          </section>
-          <section>
-            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.points}</label>
-            <textarea
-              name="puntenNieuwsbrief"
-              value={formData.puntenNieuwsbrief || ""}
+          </div>
+        </section>
+
+<section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+  {/* Nummer */}
+  <div>
+    <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.numberLabel}</label>
+    <select
+      name="nummerType"
+      value={formData.nummerType}
+      onChange={handleChange}
+      className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+    >
+      <option value="">{t.numberPlaceholder}</option>
+      {t.numberTypes.map((nt) => (
+        <option key={nt.value} value={nt.value}>{nt.label}</option>
+      ))}
+    </select>
+    {formData.nummerType !== "" && (
+      <input
+        type="text"
+        name="nummer"
+        value={formData.nummer}
+        onChange={handleChange}
+        placeholder={
+          formData.nummerType === "anders"
+            ? t.numberCustomPlaceholder || "Voer zelf een nummer of referentie in"
+            : `Vul hier je ${t.numberTypes.find(n => n.value === formData.nummerType)?.label?.toLowerCase() || "nummer"} in`
+        }
+        className="mt-3 w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+      />
+    )}
+  </div>
+
+  {/* E-mail lengte */}
+  <div>
+    <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.emailLength}</label>
+    <select
+      name="emailLength"
+      value={formData.emailLength || ""}
+      onChange={handleChange}
+      className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+    >
+      {t.emailLengthOptions.map((opt) => (
+        <option key={opt.value} value={opt.value}>{opt.label}</option>
+      ))}
+    </select>
+  </div>
+</section>
+
+
+        {/* E-mail context */}
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.emailContent}</label>
+          <textarea
+            name="context"
+            value={formData.context}
+            onChange={handleChange}
+            rows={3}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            placeholder={t.placeholderContent}
+          />
+        </section>
+      </>
+    );
+  }
+
+if (tab === "antwoord") {
+  return (
+    <>
+      {/* 1. Bovenaan: textarea voor ontvangen e-mail */}
+      <section>
+        <label className="block mb-1 md:mb-2 text-base font-semibold text-gray-700">{t.replyPaste}</label>
+        <textarea
+          name="emailTekst"
+          value={formData.emailTekst}
+          onChange={handleChange}
+          rows={8}
+          className="w-full bg-white/95 border border-indigo-300 rounded-xl px-4 py-3 text-indigo-900 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition placeholder:text-indigo-300"
+          required
+        />
+      </section>
+
+      {/* 2. Naam ontvanger + afzender */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+        <div>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.recipient}</label>
+          <input
+            type="text"
+            name="naamOntvanger"
+            value={formData.naamOntvanger}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.sender}</label>
+          <input
+            type="text"
+            name="naamAfzender"
+            value={formData.naamAfzender}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          />
+        </div>
+      </section>
+
+      {/* 3. Lengte van het antwoord + benadering */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+        <div>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.answerLength}</label>
+          <select
+            name="antwoordLengte"
+            value={formData.antwoordLengte || ""}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          >
+            {t.answerLengthOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.approach}</label>
+          <select
+            name="benadering"
+            value={formData.benadering}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          >
+            {t.approaches.map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+        </div>
+      </section>
+
+      {/* 4. Nummer dropdown (optioneel input erbij als "anders" is gekozen) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+        <div>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.numberLabel}</label>
+          <select
+            name="nummerType"
+            value={formData.nummerType}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition md:w-full"
+          >
+            <option value="">{t.numberPlaceholder}</option>
+            {t.numberTypes.map((nt) => (
+              <option key={nt.value} value={nt.value}>{nt.label}</option>
+            ))}
+          </select>
+          {formData.nummerType !== "" && (
+            <input
+              type="text"
+              name="nummer"
+              value={formData.nummer}
               onChange={handleChange}
-              rows={4}
-              placeholder={t.pointsPlaceholder}
-className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+              placeholder={
+                formData.nummerType === "anders"
+                  ? t.numberCustomPlaceholder || "Voer zelf een nummer of referentie in"
+                  : `Vul hier je ${t.numberTypes.find(n => n.value === formData.nummerType)?.label?.toLowerCase() || "nummer"} in`
+              }
+              className="mt-3 w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
-          </section>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.length}</label>
-              <select
-                name="lengteNieuwsbrief"
-                value={formData.lengteNieuwsbrief || ""}
-                onChange={handleChange}
-                className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          )}
+        </div>
+        {/* Hier zou je eventueel nog een extra veld naast Nummer kunnen plaatsen */}
+      </section>
 
-              >
-                {t.lengthOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.cta}</label>
-              <input
-                type="text"
-                name="ctaNieuwsbrief"
-                value={formData.ctaNieuwsbrief || ""}
-                onChange={handleChange}
-                className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+      {/* 5. Wat wil je antwoorden */}
+      <section>
+        <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.replyWhat}</label>
+        <textarea
+          name="antwoordWens"
+          value={formData.antwoordWens}
+          onChange={handleChange}
+          rows={4}
+          placeholder={t.replyPlaceholder}
+          className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+        />
+      </section>
+    </>
+  );
+}
 
-                placeholder={t.ctaPlaceholder}
-              />
-            </div>
-          </section>
-        </>
-      );
-    }
-    return null;
-  };
+
+  if (tab === "nieuwsbrief") {
+    return (
+      <>
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.companyName}</label>
+          <input
+            type="text"
+            name="bedrijfsnaamNieuwsbrief"
+            value={formData.bedrijfsnaamNieuwsbrief}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            placeholder={t.companyPlaceholder}
+          />
+        </section>
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.companyType}</label>
+          <select
+            name="bedrijfTypeNieuwsbrief"
+            value={formData.bedrijfTypeNieuwsbrief}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          >
+            {t.companyTypeOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </section>
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.website}</label>
+          <input
+            type="text"
+            name="websiteNieuwsbrief"
+            value={formData.websiteNieuwsbrief}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            placeholder={t.websitePlaceholder}
+          />
+        </section>
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.newsletterSubject}</label>
+          <input
+            type="text"
+            name="onderwerpNieuwsbrief"
+            value={formData.onderwerpNieuwsbrief || ""}
+            onChange={handleChange}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            placeholder={t.newsletterSubjectPlaceholder}
+          />
+        </section>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.audience}</label>
+            <select
+              name="doelgroepNieuwsbrief"
+              value={formData.doelgroepNieuwsbrief || ""}
+              onChange={handleChange}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              {t.audienceOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.style}</label>
+            <select
+              name="stijlNieuwsbrief"
+              value={formData.stijlNieuwsbrief || ""}
+              onChange={handleChange}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              {t.styleOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+        </section>
+        <section>
+          <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.points}</label>
+          <textarea
+            name="puntenNieuwsbrief"
+            value={formData.puntenNieuwsbrief || ""}
+            onChange={handleChange}
+            rows={4}
+            placeholder={t.pointsPlaceholder}
+            className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+          />
+        </section>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-4 md:mb-6">
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.length}</label>
+            <select
+              name="lengteNieuwsbrief"
+              value={formData.lengteNieuwsbrief || ""}
+              onChange={handleChange}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              {t.lengthOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block mb-1 md:mb-2 text-sm font-medium text-gray-700">{t.cta}</label>
+            <input
+              type="text"
+              name="ctaNieuwsbrief"
+              value={formData.ctaNieuwsbrief || ""}
+              onChange={handleChange}
+              className="w-full bg-white/90 border border-indigo-200 rounded-xl px-4 py-3 text-indigo-900 text-base shadow focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+              placeholder={t.ctaPlaceholder}
+            />
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  return null;
+};
+
 
   // --- UI ---
   return (
