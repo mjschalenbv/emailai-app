@@ -1,18 +1,33 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import type { JSX } from "react";
 
-const POST = {
-  slug: "top-10-free-ai-tools",
-  title: {
-    en: "Top 10 Free AI Tools – June 2025",
-    nl: "Top 10 gratis AI-tools – juni 2025",
-    fr: "Top 10 des outils IA gratuits – juin 2025",
-    es: "Top 10 de herramientas de IA gratis – junio 2025",
-    de: "Top 10 kostenlose KI-Tools – Juni 2025",
-    uk: "Топ-10 безкоштовних AI-інструментів – червень 2025",
-  },
-  body: {
-    en: (
+
+// --- Types ---
+type LanguageCode = "en" | "nl" | "fr" | "es" | "de" | "uk";
+type Blog = {
+  slug: string;
+  title: Record<LanguageCode, string>;
+  body: Record<LanguageCode, JSX.Element>;
+};
+type Params = {
+  params: { lang: LanguageCode; slug: string };
+};
+
+// --- Blogs ---
+const BLOGS: Blog[] = [
+  {
+    slug: "top-10-free-ai-tools",
+    title: {
+      en: "Top 10 Free AI Tools",
+      nl: "Top 10 gratis AI-tools",
+      fr: "Top 10 des outils IA gratuits",
+      es: "Top 10 de herramientas de IA gratis",
+      de: "Top 10 kostenlose KI-Tools",
+      uk: "Топ-10 безкоштовних AI-інструментів",
+    },
+    body: {
+      en: (
       <>
         <p>
           AI isn’t just for techies anymore. Today, anyone can use powerful, free AI tools to save time, be more creative, or boost productivity. Here’s a list of ten genuinely useful (and free!) AI tools you can start using right away:
@@ -321,54 +336,46 @@ const POST = {
         </ol>
         <p className="mt-6">
           У більшості інструментів є додаткові функції після реєстрації, але спробувати можна безкоштовно. Є улюблений інструмент, якого не вистачає? Напишіть нам!
-        </p>
-      </>
-    ),
+   </p>
+        </>
+      ),
+    },
   },
-};
+];
 
-const LANGUAGES = ["en", "nl", "fr", "es", "de", "uk"];
-
+// --- Statics & Meta ---
 export async function generateStaticParams() {
-  return LANGUAGES.map((lang) => ({
-    lang,
-    slug: POST.slug,
-  }));
+  return BLOGS.flatMap(blog =>
+    Object.keys(blog.title).map(lang => ({
+      lang,
+      slug: blog.slug,
+    }))
+  );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string; slug: string };
-}): Promise<Metadata> {
-  const { lang } = params;
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const blog = BLOGS.find(b => b.slug === params.slug);
+  const title = blog?.title[params.lang] || blog?.title.en || "Blog";
   return {
-    title: POST.title[lang as keyof typeof POST.title] || POST.title.en,
-    description: "Top 10 gratis AI-tools voor juni 2025",
+    title,
+    description: "Blog artikel",
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: { lang: string; slug: string };
-}) {
-  const { lang, slug } = params;
+// --- Page component ---
+export default function Page({ params }: Params) {
+  const blog = BLOGS.find(b => b.slug === params.slug);
+  if (!blog) return notFound();
 
-  if (slug !== POST.slug || !LANGUAGES.includes(lang)) {
-    notFound();
-  }
+  // Fallback naar Engels als de taal niet bestaat
+  const body = blog.body[params.lang] || blog.body.en;
 
   return (
-    <main className="min-h-[60vh] flex flex-col items-center justify-center py-10 px-2">
-      <article className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 border border-white/40">
-        <h1 className="text-3xl font-bold text-[#292968] mb-6">
-          {POST.title[lang as keyof typeof POST.title]}
-        </h1>
-        <div className="prose prose-indigo max-w-none text-[#2a2954]">
-          {POST.body[lang as keyof typeof POST.body]}
-        </div>
-      </article>
+    <main className="max-w-2xl mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-4">
+        {blog.title[params.lang] || blog.title.en}
+      </h1>
+      <article className="prose">{body}</article>
     </main>
   );
 }

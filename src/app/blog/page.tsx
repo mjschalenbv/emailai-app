@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-// Types
+// --- Types
 type LanguageCode = "en" | "nl" | "fr" | "es" | "de" | "uk";
 
 interface Blog {
@@ -12,6 +12,7 @@ interface Blog {
   date: string;
 }
 
+// --- Blog Data
 const BLOGS: Blog[] = [
   {
     slug: "top-10-free-ai-tools",
@@ -55,6 +56,7 @@ const BLOGS: Blog[] = [
   },
 ];
 
+// --- Talen
 const LANGUAGES: { code: LanguageCode; label: string }[] = [
   { code: "en", label: "English" },
   { code: "nl", label: "Nederlands" },
@@ -65,6 +67,7 @@ const LANGUAGES: { code: LanguageCode; label: string }[] = [
 ];
 
 export default function BlogOverview() {
+  // Standaard taal (bijv. uit browser halen of cookies in de toekomst)
   const [lang, setLang] = useState<LanguageCode>("en");
 
   return (
@@ -72,6 +75,7 @@ export default function BlogOverview() {
       <div className="w-full max-w-2xl px-4">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold text-white">Blog</h1>
+          {/* Taal wisselaar */}
           <select
             className="rounded-xl py-2 px-4 bg-[#ececff] text-[#292968] font-semibold shadow focus:outline-none"
             value={lang}
@@ -84,7 +88,7 @@ export default function BlogOverview() {
             ))}
           </select>
         </div>
-
+        {/* Blog lijst */}
         <div className="grid gap-6">
           {BLOGS.map(blog => (
             <a
@@ -94,11 +98,14 @@ export default function BlogOverview() {
             >
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold text-[#292968]">
-                  {blog.title[lang]}
+                  {/* Fallback naar Engels als vertaling mist */}
+                  {blog.title[lang] || blog.title.en}
                 </h2>
                 <span className="text-xs text-gray-500">{blog.date}</span>
               </div>
-              <p className="mt-2 text-[#555575]">{blog.excerpt[lang]}</p>
+              <p className="mt-2 text-[#555575]">
+                {blog.excerpt[lang] || blog.excerpt.en}
+              </p>
             </a>
           ))}
         </div>
