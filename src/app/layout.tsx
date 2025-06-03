@@ -5,7 +5,10 @@ import { Analytics } from "@vercel/analytics/react";
 import Link from "next/link";
 import Image from "next/image";
 
-// Fonts config
+
+
+
+// Font config
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -57,23 +60,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body
-        className={`
-          ${geistSans.variable} ${geistMono.variable} antialiased
-          min-h-screen flex flex-col bg-[#181929]
-        `}
-        style={{
-          backgroundAttachment: "fixed",
-        }}
+        className="antialiased min-h-screen flex flex-col bg-[#181929]"
+        style={{ backgroundAttachment: "fixed" }}
       >
         {/* HEADER */}
         <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-white/10 border-b border-indigo-100/10 shadow-xl transition-all duration-300">
           <div className="max-w-5xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 sm:py-3">
+            {/* Logo en naam */}
             <Link
               href="/"
               className="flex items-center gap-2 sm:gap-3 group min-w-0"
-              style={{ minWidth: 0 }}
             >
               <Image
                 src="/logo-icon.png"
@@ -88,14 +86,27 @@ export default function RootLayout({
                 EmailAI
               </span>
             </Link>
-            <Link
-              href="/contact"
-              className="ml-auto px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
-            >
-              Contact & Support
-            </Link>
+            {/* NAVIGATION + TAAL */}
+            <nav className="flex items-center gap-2 sm:gap-4 ml-auto">
+              <Link
+                href="/blog"
+                className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
+              >
+                Blog
+              </Link>
+              <Link
+                href="/contact"
+                className="px-4 py-2 rounded-2xl bg-white/80 text-indigo-800 font-semibold border border-indigo-100/30 shadow hover:bg-indigo-50 hover:text-purple-700 transition-all text-base sm:text-lg tracking-tight"
+              >
+                Contact & Support
+              </Link>
+          
+
+
+            </nav>
           </div>
         </header>
+
         {/* MAIN CONTENT */}
         <main className="flex-1 w-full flex flex-col items-center justify-center relative z-10">
           <div
@@ -126,16 +137,21 @@ export default function RootLayout({
             {children}
           </div>
         </main>
+
         {/* FOOTER */}
         <footer className="w-full bg-transparent flex justify-center py-8 text-gray-400 text-xs font-medium tracking-tight">
           <div className="max-w-5xl w-full flex justify-center items-center">
-            <Link href="/privacy" className="hover:text-purple-400 underline underline-offset-4 transition-colors">
+            <Link
+              href="/privacy"
+              className="hover:text-purple-400 underline underline-offset-4 transition-colors"
+            >
               Privacy Policy
             </Link>
             <span className="mx-2">•</span>
             <span>© {new Date().getFullYear()} EmailAI</span>
           </div>
         </footer>
+
         <Analytics />
         {/* Animation keyframes */}
         <style>{`
