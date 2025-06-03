@@ -1,16 +1,15 @@
-// src/app/blog/[lang]/[slug]/page.tsx
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-// Hier je vertalingen voor de post
 const POST = {
   slug: "top-10-free-ai-tools",
   title: {
-en: "Top 10 Free AI Tools – June 2025",
-nl: "Top 10 gratis AI-tools – juni 2025",
-fr: "Top 10 des outils IA gratuits – juin 2025",
-es: "Top 10 de herramientas de IA gratis – junio 2025",
-de: "Top 10 kostenlose KI-Tools – Juni 2025",
-uk: "Топ-10 безкоштовних AI-інструментів – червень 2025",
+    en: "Top 10 Free AI Tools – June 2025",
+    nl: "Top 10 gratis AI-tools – juni 2025",
+    fr: "Top 10 des outils IA gratuits – juin 2025",
+    es: "Top 10 de herramientas de IA gratis – junio 2025",
+    de: "Top 10 kostenlose KI-Tools – Juni 2025",
+    uk: "Топ-10 безкоштовних AI-інструментів – червень 2025",
   },
   body: {
     en: (
@@ -328,28 +327,43 @@ uk: "Топ-10 безкоштовних AI-інструментів – черв
   },
 };
 
-// Ondersteunde talen
 const LANGUAGES = ["en", "nl", "fr", "es", "de", "uk"];
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { lang: string; slug: string };
-}) {
+type Props = {
+  params: {
+    lang: string;
+    slug: string;
+  };
+};
+
+export async function generateStaticParams() {
+  return LANGUAGES.map((lang) => ({
+    lang,
+    slug: POST.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = params;
+  return {
+    title: POST.title[lang as keyof typeof POST.title] || POST.title.en,
+    description: "Top 10 gratis AI-tools voor juni 2025",
+  };
+}
+
+export default async function Page({ params }: Props) {
   const { lang, slug } = params;
 
-  // Alleen tonen als slug en lang kloppen
-  if (
-    slug !== POST.slug ||
-    !LANGUAGES.includes(lang)
-  ) {
+  if (slug !== POST.slug || !LANGUAGES.includes(lang)) {
     notFound();
   }
 
   return (
     <main className="min-h-[60vh] flex flex-col items-center justify-center py-10 px-2">
       <article className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 border border-white/40">
-        <h1 className="text-3xl font-bold text-[#292968] mb-6">{POST.title[lang as keyof typeof POST.title]}</h1>
+        <h1 className="text-3xl font-bold text-[#292968] mb-6">
+          {POST.title[lang as keyof typeof POST.title]}
+        </h1>
         <div className="prose prose-indigo max-w-none text-[#2a2954]">
           {POST.body[lang as keyof typeof POST.body]}
         </div>
@@ -357,4 +371,3 @@ export default async function BlogPostPage({
     </main>
   );
 }
-
