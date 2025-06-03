@@ -329,13 +329,6 @@ const POST = {
 
 const LANGUAGES = ["en", "nl", "fr", "es", "de", "uk"];
 
-type Props = {
-  params: {
-    lang: string;
-    slug: string;
-  };
-};
-
 export async function generateStaticParams() {
   return LANGUAGES.map((lang) => ({
     lang,
@@ -343,7 +336,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: string; slug: string };
+}): Promise<Metadata> {
   const { lang } = params;
   return {
     title: POST.title[lang as keyof typeof POST.title] || POST.title.en,
@@ -351,7 +348,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page({
+  params,
+}: {
+  params: { lang: string; slug: string };
+}) {
   const { lang, slug } = params;
 
   if (slug !== POST.slug || !LANGUAGES.includes(lang)) {
