@@ -331,7 +331,7 @@ uk: "Топ-10 безкоштовних AI-інструментів – черв
 // Ondersteunde talen
 const LANGUAGES = ["en", "nl", "fr", "es", "de", "uk"];
 
-export default function BlogPostPage({
+export default async function BlogPostPage({
   params,
 }: {
   params: { lang: string; slug: string };
@@ -357,3 +357,4 @@ export default function BlogPostPage({
     </main>
   );
 }
+
