@@ -1,7 +1,7 @@
 "use client";
 import EmailForm from "./components/EmailForm";
 
-export default function Home() {
+export default function Page() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-start bg-[#181929] relative overflow-x-hidden pb-14">
       {/* Floating neon background blobs */}
