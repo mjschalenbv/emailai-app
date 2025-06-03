@@ -10,9 +10,7 @@ type Blog = {
   title: Record<LanguageCode, string>;
   body: Record<LanguageCode, JSX.Element>;
 };
-type Params = {
-  params: { lang: LanguageCode; slug: string };
-};
+
 
 // --- Blogs ---
 const BLOGS: Blog[] = [
@@ -353,27 +351,29 @@ export async function generateStaticParams() {
   );
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { lang: string; slug: string } }
+): Promise<Metadata> {
   const blog = BLOGS.find(b => b.slug === params.slug);
-  const title = blog?.title[params.lang] || blog?.title.en || "Blog";
+  const title = blog?.title[params.lang as LanguageCode] || blog?.title.en || "Blog";
   return {
     title,
     description: "Blog artikel",
   };
 }
 
-// --- Page component ---
-export default function Page({ params }: Params) {
+export default function Page(
+  { params }: { params: { lang: string; slug: string } }
+) {
   const blog = BLOGS.find(b => b.slug === params.slug);
   if (!blog) return notFound();
 
-  // Fallback naar Engels als de taal niet bestaat
-  const body = blog.body[params.lang] || blog.body.en;
+  const body = blog.body[params.lang as LanguageCode] || blog.body.en;
 
   return (
     <main className="max-w-2xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-4">
-        {blog.title[params.lang] || blog.title.en}
+        {blog.title[params.lang as LanguageCode] || blog.title.en}
       </h1>
       <article className="prose">{body}</article>
     </main>
