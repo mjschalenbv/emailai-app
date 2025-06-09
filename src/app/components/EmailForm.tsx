@@ -1248,7 +1248,7 @@ if (tab === "antwoord") {
   </button>
 </div>
 
-{/* Universele Taalkeuze */}
+
 <div className="flex justify-center mb-2 sm:mb-6">
   <select
     name="taal"
